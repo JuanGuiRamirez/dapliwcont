@@ -1,0 +1,51 @@
+{% block inicioDajax %}{% endblock inicioDajax %}	
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" 
+		content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<title>conta</title>	
+		{% block importJsDajax %}{% endblock importJsDajax %}			
+		<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{STATIC_URL}}css/estiloHeader.css">
+		{% block estilo %}{% endblock estilo %}	
+	</head>
+
+	<body>
+		<header class="row">
+			<div class="logo col-sm-2 col-xs-4 text-center">
+				<img src="{{STATIC_URL}}img/logotipo.png">
+			</div>
+			
+			<div class="titulo col-sm-5 col-xs-8">
+				<h1>Dapliw2014</h1>
+			</div>
+		</header>
+		
+		<nav>
+			<ul class="menu nav nav-tabs">
+				<li><a href="{% url producto.views.index %}">Productos</a></li>
+				<li><a href="{% url cliente.views.index %}">Terceros</a></li>
+				<li><a href="{% url proveedor.views.index %}">Proveedor</a></li>
+				<li><a href="/factV/">Factura Venta</a></li>
+				<li><a href="#">Caja</a></li>				
+			</ul>
+		</nav>
+				
+		
+		{% block contenido %}
+
+		{% endblock contenido %}
+		
+		<script type="text/javascript" src="{{STATIC_URL}}js/jquery.js" ></script>
+		<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js" ></script>
+		{% block script %}
+
+		{% endblock script %}
+		
+	</body>
+</html>
+
+	
+	

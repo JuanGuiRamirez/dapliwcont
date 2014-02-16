@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block estilo %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+{% endblock estilo %}
+	
+{% block contenido %}
+	<section id="contenedor" class="contenedor row">
+		<article class="col col-xs-10 col-xs-offset-1">			
+			<div class="row contenedor">
+				<div class="col col-sm-3" id="dProdveedor" >
+					<div class="input-group ">
+						<input type="text" id="txtNitProveedor" class="form-control" placeholder="Nit proveedor">
+						<span class="input-group-btn">
+					    	<button class="btn btn-default" type="button" id="btnBuscar" onclick="getProveedor();">
+					    	  		<span class="glyphicon glyphicon-search"></span> 
+					    	</button>
+				    	</span>
+					</div>
+					<input type="text" class="form-control" readonly placeholder="Juan Guillermo Ramirez Cardona"/>	
+					<input type="text" class="form-control" readonly placeholder="Fecha Factura"/>	
+					<input type="text" class="form-control" readonly placeholder="Numero Factura"/>					
+				</div>
+				
+				<div class="col col-sm-9" >
+					<form role="form" >
+					
+						<div class="row" id="dProducto1">					      
+						      <div class="col-sm-3"> 
+					      		<div class="input-group">
+									<input type="text" class="form-control" placeholder="Codigo producto">
+									<span class="input-group-btn">
+								    	<button class="btn btn-default" type="button" id="btnBuscar">
+								    	  		<span class="glyphicon glyphicon-search"></span> 
+								    	</button>
+							    	</span>
+								</div>
+						      </div>
+						      <div class="col-sm-4">
+							      	<input type="text" class="form-control" readonly placeholder="Nombre producto"/>
+							  </div>					      
+						      <div class="col-sm-2">
+							     	<input type="text" class="form-control" placeholder="Cantidad"/>
+							  </div>						  					      					      
+					    </div>
+					    
+					    <div class="row" id="dProducto2">
+						      <div class="col-sm-2">
+						     		<input type="text" class="form-control"  placeholder="Descuento"/>
+						      </div>
+						      
+						      <div class="col-sm-2">
+						     		<input type="text" class="form-control" readonly placeholder="Valor Prd"/>
+						      </div>
+						      						     
+						      <div class="col-sm-2">
+						     	<input type="text" class="form-control" readonly placeholder="Total Prd"/>
+						      </div>
+						     
+						      <div class="col-sm-1">
+						     	<a href="{% url cliente.views.registro %}" class="btn btn-success">Agregar</a>
+						      </div>
+						      
+						      <div class="col-sm-1">
+						     	<a href="{% url cliente.views.registro %}" class="btn btn-warning">Limpiar</a>
+						      </div>					      
+					    </div>
+					    
+					    <div class="row" id="dListProducto">
+					    	<div id="tablaClientes" class="col-md-10">
+						    	<table class="table table-hover">
+									<thead>
+										<tr>
+											<td>Codigo</td>
+											<td>Producto</td>						
+											<td>Cantidad</td>						
+											<td>Valor Uni</td>
+											<td>Descuento</td>				
+											<td>Total</td>
+											<td></td>
+										</tr>
+									</thead>
+									<tbody>									
+										{% for producto in lista %}
+										<tr>
+											<td>{{ producto.codigo }}</td>
+											<td>{{ producto.nombre }}</td>
+											<td>{{ producto.cantidad }}</td>
+											<td>{{ producto.preciocompra }}</td>
+											<td>{{ producto.precioventa }}</td>
+											<td>{{ producto.precioventa }}</td>
+											<td>
+												<a href="#" role="button" class="btn btn-default">
+													<span class="glyphicon glyphicon-edit"></span>
+												</a> 
+												<a data-toggle="modal" onclick="#" class="btn btn-danger">
+													<span class="glyphicon glyphicon-trash"></span> 
+												</a> 
+											</td>	
+										</tr>
+										{% empty %}
+											<td colspan="6">No hay Productos</td>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+					    </div>	
+					    				    					    
+					</form>
+				</div>
+							
+			</div>		
+		</article>	
+	</section>
+
+{% endblock contenido %}
+
+{% block script %}
+	<script type="text/javascript">
+	
+	function getProveedor(){
+		var nitP = document.getElementById("txtNitProveedor").value;
+		alert(nitP);
+		
+		$.ajax({			
+			url:'/pA/',
+			data: {
+				    nit : nitP,
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+				  },
+			type: 'post',
+			success: function(data){
+				alert('BN');				
+			},
+			processData: false,
+			contentType: false,
+			error: function(data){
+				alert('Error del servidor');
+			}
+		});	
+	}
+	
+	</script>
+{% endblock script %}
+	

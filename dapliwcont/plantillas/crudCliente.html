@@ -1,0 +1,22 @@
+{% extends "base.html" %}	
+
+{% block estilo %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+{% endblock estilo %}
+
+{% block contenido %}
+	<section id="contenedor" class="col-md-6 col-md-offset-3 ">	
+		<article  class="panel panel-primary ">
+			<div class="panel-heading" id="panel-heading">
+				<h3 class="panel-title">{{ titulo }}</h3>
+			</div>
+			<div class="panel-body">
+				<form method="post"> {% csrf_token %}
+					{{ formulario }}
+					<input type="submit" class="btn btn-primary" id="btn_submit">
+					<a href="{% url cliente.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>	
+				</form>
+			</div>			
+		</article>
+	</section>
+{% endblock contenido %}

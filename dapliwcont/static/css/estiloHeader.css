@@ -1,0 +1,25 @@
+header
+{
+	background-color: #444;
+	color: white;
+	padding: 1em;
+}
+
+header h1
+{	
+  	font-size: 22px;
+  	font-weight: normal;
+  	padding: 0;
+  	margin-top:  0.2em;
+}
+
+header img
+{
+	height: 70px;
+}
+
+nav
+{
+	margin-bottom: 2em;
+}
+

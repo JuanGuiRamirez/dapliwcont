@@ -1,0 +1,45 @@
+input, #btnBuscar, a
+{
+	display: block;
+	margin: 0.2em 0 0.2em 0;
+}
+
+table thead td
+{	
+	font-weight: bold;
+}
+
+#filtroProducto div
+{
+	margin-bottom: 1em;
+}
+
+#btn_submit, #btn_volver
+{
+	margin-top: 0.5em;
+}
+
+#dListProducto
+{		
+	padding-top: 2em;			
+}
+
+#dProducto1, #dProducto2, #dListProducto
+{
+	border-left: 2px solid black;
+}
+
+#filtroProducto, #filtroCliente
+{	
+	padding: 1em;	
+}
+
+#tablaProductos
+{
+	padding: 1em;
+}
+
+
+
+
+

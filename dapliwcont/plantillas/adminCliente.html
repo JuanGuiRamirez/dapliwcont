@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+	
+{% block estilo %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+{% endblock estilo %}
+
+
+{% block contenido %}
+	<section id="contenedor" >
+
+		<article id="filtroCliente" class="col-md-10 col-md-offset-2">
+			<form action="." method="GET" class="row">
+				<div class="col-sm-4 col-xs-9">
+					<input type="text" class="form-control " name="q" value="{{ query|escape }}" placeholder="Ingrese un filtro para realizar la busqueda">
+				</div>
+				<div class="col-sm-6 col-xs-8">
+					<input type="submit" class="btn btn-info" value="Buscar">
+					<a href="{% url cliente.views.registro %}" class="btn btn-primary">Agregar Tercero</a>	
+				</div>
+			</form>	
+		</article>
+		
+		<article id="tablaClientes" class="col-md-8 col-md-offset-2">				
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>Identificacion</td>									
+						<td>Nombre Completo</td>
+						<td>Saldo Favor</td>
+						<td>Saldo Deuda</td>
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for cliente in clientes %}
+					<tr>
+						<td>{{ cliente.identificacion }}</td>
+						<td>{{ cliente.nombre }}</td>
+						<td>{{ cliente.saldofavor }}</td>
+						<td>{{ cliente.saldodeuda }}</td>
+						<td>
+							<a href="{% url cliente.views.editarCliente cliente.id %}" role="button" class="btn btn-default">
+								<span class="glyphicon glyphicon-edit"></span>
+							</a> 
+							<a data-toggle="modal" onclick="cargarModal(this.id);" class="btn btn-danger" id="{{ cliente.id }}">
+								<span class="glyphicon glyphicon-trash"></span> 
+							</a> 
+						</td>	
+					</tr>
+					{% empty %}
+						<td colspan="6">No hay Terceros</td>
+					{% endfor %}
+				</tbody>
+			</table>
+		</article>
+
+		<article class="modal fade" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Eliminar Tercero</h4>
+					</div>
+					<div class="modal-body">
+						<p>Esta seguro que desea eliminar este Tercero?</p>	
+					</div>
+					<div class="modal-footer">						
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+						<a class="btn btn-danger" id="btnDel" onclick="eliminar();" data-toggle="modal">Eliminar</a>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</article><!-- /.modal -->
+		
+	</section>
+
+{% endblock contenido %}
+
+
+{% block script %}
+	<script type="text/javascript">
+
+		var id_cli = 0;
+
+		function cargarModal(id)
+		{			
+			id_cli = id;
+			$('#myModal').modal('show');
+					
+		}
+
+		function eliminar()
+		{
+			url = '{% url cliente.views.delCliente 0 %}'.replace('0', id_cli);
+			$.ajax({			
+						url: url,						
+						type: 'GET',
+						data : {formula: url},
+						success: function(data){
+							location.reload();
+						},
+						processData: false,
+						contentType: false,
+						error: function(data){
+							alert('Error de servidor');
+						}
+					});
+		}
+
+	</script>
+{% endblock script %}
