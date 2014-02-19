@@ -5,6 +5,7 @@ from django.db.models.aggregates import Sum
 from django.utils import simplejson
 from factVenta.models import productoVenta, cabeceraVenta
 from producto.models import producto
+from cxc.models import cuentaCobrar
 import datetime
 
 
@@ -136,5 +137,17 @@ def facturar (request, cabeceraId, formaPago, fechaFact, numFact):
     #actualizamos cabecera
     actualizaCabecera('', fechaFact, numFact, cabeceraId, formaPago, 'F')
     
-    #falta crear cxp o cxc
+    #crear cxc o mover caja    
+    if formaPago == 'F' :
+        cuenta = cuentaCobrar(created = datetime.datetime.now(),
+                                createdby = 1,
+                                isactive = "Y",
+                                updated = datetime.datetime.now(),
+                                updatedby = 1,  
+                                totalAbonos = 0,
+                                caberaId_id = cabeceraId
+                              )
+        cuenta.save()
+    else:
+        caja = 
     
