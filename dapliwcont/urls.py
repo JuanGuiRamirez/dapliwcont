@@ -6,15 +6,18 @@ from dajaxice.core import dajaxice_autodiscover, dajaxice_config
 dajaxice_autodiscover()
 
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
+from django.contrib import admin
 # admin.autodiscover()
 
 urlpatterns = patterns('',
                        
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     
+    url(r'^$', 'django.contrib.auth.views.login', {'template_name':'login.html'}, name='login'),
+    
+    url(r'^cerrar/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
                        
-    url(r'^$', 'producto.views.index'),
+    url(r'^index/$', 'producto.views.index', name = 'index'),
     url(r'^rprod/$', 'producto.views.registro'),
     url(r'^eprod/(?P<producto_id>[^/]+)$', 'producto.views.editarProducto'),
     url(r'^dprod/(?P<producto_id>[^/]+)$', 'producto.views.delProducto'),
@@ -39,7 +42,7 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+     url(r'^admin/', include(admin.site.urls)),
 )
 
 urlpatterns += staticfiles_urlpatterns()

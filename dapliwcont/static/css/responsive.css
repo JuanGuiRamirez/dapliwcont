@@ -1,0 +1,16 @@
+@media screen and (min-width: 768px)
+{
+	body
+	{
+		margin: 0 auto;
+		max-width: 1200px;
+	}
+	
+	article
+	{		
+		margin-left: 25%;
+		margin-top : 18%;
+		width: 50%;
+	}	
+
+}

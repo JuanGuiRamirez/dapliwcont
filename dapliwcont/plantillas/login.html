@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" 
+		content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<title>Login</title>				
+		<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{STATIC_URL}}css/estiloLogin.css">
+		<link rel="stylesheet" href="{{STATIC_URL}}css/responsive.css">
+	</head>
+
+	<body>
+	
+	
+	<article>		
+		<h1>Iniciar Sesión</h1>
+		<form method="post" id="formLogin"> {% csrf_token %}
+			
+			{% if form.errors %}
+				<div class="alert alert-danger">Su nombre de usuario y la contraseña no coinciden. Por favor, inténtelo de nuevo.</div>					
+			{% endif %}
+		    <input type="text" class="form-control" name="username" autocomplete="off" placeholder="Usuario">			
+		    <input type="password" class="form-control" name="password" placeholder="Contraseña">			 		 
+		  	<button type="submit" class="btn btn-primary">Ingresar</button>
+		</form>	
+	</article>
+		
+		
+				
+		
+		
+		
+		<script type="text/javascript" src="{{STATIC_URL}}js/bootstrap.min.js" ></script>	
+	</body>
+</html>
+
+	
+	

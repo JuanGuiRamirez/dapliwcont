@@ -1,14 +1,15 @@
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, Http404
-from django.db.models import Q
-
-from producto.models import producto
 from producto.formularios import productoForms
+from producto.models import producto
 import datetime
 
 
 
+@login_required(login_url='/')
 def index(request):
     query = request.GET.get('q','')    
     if query:
@@ -20,7 +21,7 @@ def index(request):
     return render_to_response('adminProducto.html', {'productos':lista_productos,}, context_instance=RequestContext(request))
     
 
-
+@login_required(login_url='/')
 def registro(request):
     if request.method == "POST":
         formulario = productoForms(request.POST)

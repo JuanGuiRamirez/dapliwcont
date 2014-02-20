@@ -148,6 +148,5 @@ def facturar (request, cabeceraId, formaPago, fechaFact, numFact):
                                 caberaId_id = cabeceraId
                               )
         cuenta.save()
-    else:
-        caja = 
+
     
