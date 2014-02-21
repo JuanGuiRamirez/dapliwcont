@@ -59,7 +59,7 @@
 				  </li>
 				  <li class="list-group-item">
 					<label class="checkbox">
-			            <input type="checkbox" value="option1" id="inlineCheckbox1"> Facturar a cr&eacute;dito?
+			            <input type="checkbox" value="option1" id="formaPagoCheck"> Facturar a cr&eacute;dito?
 			        </label>
 				  </li>
 				  <li class="list-group-item">
@@ -339,8 +339,19 @@
 		}
 		else
 		{
-			$("#resultado").html('');	
+			$("#resultado").html('');
+			var forma_pago = $('#formaPagoCheck').val();
+			alert(forma_pago);
+			Dajaxice.factVenta.facturar(facturaResult,{'cabeceraId': cabeceraGeneral,
+														  'formaPago' : forma_pago,
+														  'fechaFact' :	$('#txtFechaFactura').val(),				
+														  'numFact': $('#txtNumeroFactura').val()});
 		}
+	}
+	
+	function facturaResult(datas)
+	{
+		alert('fue y volvio');
 	}
 	
 	</script>
