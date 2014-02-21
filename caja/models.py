@@ -14,6 +14,10 @@ class caja ( models.Model ):
     fechaInicio = models.DateField()
     fechaCierre = models.DateField()
     
+    def cajaAbierta(self):
+        caja = caja.objects.filter(estado='O')
+        return caja.id
+    
 
 class egreso ( models.Model ):
     created = models.DateTimeField()

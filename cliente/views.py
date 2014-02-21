@@ -28,10 +28,10 @@ def registro(request):
         if formulario.is_valid():
             ins_save = formulario.save( commit = False)
             ins_save.created =  datetime.datetime.now() 
-            ins_save.createdby = 1
+            ins_save.createdby =  str(request.user.id)
             ins_save.isactive = 'Y'
             ins_save.updated = datetime.datetime.now() 
-            ins_save.updatedby = 1
+            ins_save.updatedby =  str(request.user.id)
             ins_save.save()
             return HttpResponseRedirect('/rclis')
     else:

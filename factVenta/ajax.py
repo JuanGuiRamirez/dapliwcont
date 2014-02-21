@@ -6,6 +6,7 @@ from django.utils import simplejson
 from factVenta.models import productoVenta, cabeceraVenta
 from producto.models import producto
 from cxc.models import cuentaCobrar
+from caja.models import caja
 import datetime
 
 
@@ -148,5 +149,8 @@ def facturar (request, cabeceraId, formaPago, fechaFact, numFact):
                                 caberaId_id = cabeceraId
                               )
         cuenta.save()
+    else:
+        cajaUso = caja.cajaAbierta()
+        pass
 
     

@@ -28,12 +28,12 @@ def registro(request):
         if formulario.is_valid():
             ins_save = formulario.save( commit = False)
             ins_save.created =  datetime.datetime.now() 
-            ins_save.createdby = 1
+            ins_save.createdby = str(request.user.id)
             ins_save.isactive = 'Y'
             ins_save.updated = datetime.datetime.now() 
-            ins_save.updatedby = 1
+            ins_save.updatedby = str(request.user.id),
             ins_save.save()
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/index')
     else:
         formulario = productoForms()
     return render_to_response('crudProducto.html', {"formulario":formulario}, 
@@ -53,7 +53,7 @@ def editarProducto(request, producto_id):
             ins_save.updatedby = str(request.user.id)
             if ins_save.preciocompra < ins_save.precioventa:
                 ins_save.save()
-                return HttpResponseRedirect('/')
+                return HttpResponseRedirect('/index')
             else:
                 error = 'El precio de compra debe ser menor que el precio de venta'
     else:
@@ -67,6 +67,6 @@ def delProducto(request, producto_id):
     if request.is_ajax and request.method == "GET":        
         producto_eliminar = producto.objects.get(pk=producto_id)
         producto_eliminar.delete()
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/index')
     else:
         return Http404

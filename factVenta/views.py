@@ -11,15 +11,13 @@ import json as json
 
 
 
-def index(request):  
-    
-    clienteid = cliente.objects.get(id=1)
+def index(request):      
     #creo una cabecera para la factura    
     cabecera = cabeceraVenta(created = datetime.datetime.now(),
-                                createdby = 1,
+                                createdby = str(request.user.id),
                                 isactive = "Y",
                                 updated = datetime.datetime.now(),
-                                updatedby = 1,                                
+                                updatedby = str(request.user.id),                                
                                 clienteId_id =1,
                                 fechaFactura ='1900-01-01',
                                 numeroFactura = "0",
