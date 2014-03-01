@@ -6,7 +6,7 @@ from django.utils import simplejson
 from factVenta.models import productoVenta, cabeceraVenta
 from producto.models import producto
 from cxc.models import cuentaCobrar
-from caja.models import caja
+from caja.models import caja, ingreso
 import datetime
 
 
@@ -21,10 +21,10 @@ def getProductos(request, codigoPrd, cabeceraId):
             countProductos[0].save()        
         else:
             productoxVenta = productoVenta(created = datetime.datetime.now(),
-                                    createdby = 1,
+                                    createdby = str(request.user.id),
                                     isactive = "Y",
                                     updated = datetime.datetime.now(),
-                                    updatedby = 1,  
+                                    updatedby = str(request.user.id),  
                                     productoId_id = productoajax[0].id,
                                     nombreProducto = productoajax[0].nombre,
                                     cantidad = 1,
@@ -59,7 +59,7 @@ def actualizaCabecera( nitCliente, fechaFact, numFact, cabeceraId, forPago, est 
         cabecera.estado = est 
     cabecera.formaPago = forPago  
     cabecera.save()       
-
+    return cabecera.totalPagar
 
 def calcularTotales (cabeceraId):
     cabecera = cabeceraVenta.objects.get(pk=cabeceraId)
@@ -136,21 +136,31 @@ def facturar (request, cabeceraId, formaPago, fechaFact, numFact):
         prdEdit.save()
     
     #actualizamos cabecera
-    actualizaCabecera('', fechaFact, numFact, cabeceraId, formaPago, 'F')
+    total = actualizaCabecera('', fechaFact, numFact, cabeceraId, formaPago, 'F')
     
     #crear cxc o mover caja    
     if formaPago == 'F' :
         cuenta = cuentaCobrar(created = datetime.datetime.now(),
-                                createdby = 1,
+                                createdby = str(request.user.id),
                                 isactive = "Y",
                                 updated = datetime.datetime.now(),
-                                updatedby = 1,  
+                                updatedby = str(request.user.id),  
                                 totalAbonos = 0,
                                 caberaId_id = cabeceraId
                               )
         cuenta.save()
     else:
-        cajaUso = caja.cajaAbierta()
-        pass
+        cajaUso = caja.objects.filter(estado='O')
+        ing = ingreso(created = datetime.datetime.now(),
+                        createdby = str(request.user.id),
+                        isactive = "Y",
+                        updated = datetime.datetime.now(),
+                        updatedby = str(request.user.id),                      
+                        totalIngreso =  total , 
+                        fechaIngreso = datetime.datetime.now(),
+                        descripcion = 'Venta de contado',
+                        cajaId = cajaUso[0].id                      
+                      )
+        ing.save()
 
     
