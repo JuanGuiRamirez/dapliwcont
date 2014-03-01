@@ -1,5 +1,9 @@
 from django.db import models
 
+class cajaUsoManager(models.Manager):
+    def get_query_set(self):
+        return super(cajaUsoManager, self).get_query_set().filter(estado='O')
+
 class caja ( models.Model ):
     created = models.DateTimeField() 
     createdby = models.CharField(max_length=100)
@@ -14,9 +18,9 @@ class caja ( models.Model ):
     fechaInicio = models.DateField()
     fechaCierre = models.DateField()
     
-    def cajaAbierta(self):
-        caja = caja.objects.filter(estado='O')
-        return caja.id
+    objects = models.Manager() 
+    cajaUso = cajaUsoManager()
+    
     
 
 class egreso ( models.Model ):
