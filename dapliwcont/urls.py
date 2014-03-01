@@ -27,6 +27,9 @@ urlpatterns = patterns('',
     url(r'^ecli/(?P<cliente_id>[^/]+)$', 'cliente.views.editarCliente'),
     url(r'^dcli/(?P<cliente_id>[^/]+)$', 'cliente.views.delCliente'),
     
+    url(r'^clis/$', 'caja.views.index'),
+    url(r'^cing/$', 'caja.views.rIngreso'),
+    
     url(r'^plis/$', 'proveedor.views.index'),
     url(r'^pA/$', 'proveedor.views.nitAjax'),
     

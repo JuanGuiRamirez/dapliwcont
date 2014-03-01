@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block inicioDajax %}
+	{% load dajaxice_templatetags %}
+{% endblock inicioDajax %}
+
+{% block importJsDajax %}
+	{% dajaxice_js_import %}
+	<script type="text/javascript" src="/static/dajax/jquery.dajax.core.js" ></script>
+{% endblock importJsDajax %}
+	
+{% block estilo %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery-ui-1.10.3.custom.min.css">
+{% endblock estilo %}
+
+
+{% block contenido %}
+	
+	<section id="contenedor" >	
+		<article class="col-md-8 col-md-offset-2">
+			<ul class="nav nav-tabs nav-justified" id="tabs">
+			  <li class="active"><a href="#">Caja</a></li>
+			  <li><a href="#ingreso">Ingresos</a></li>
+			  <li><a href="#egreso">Egresos</a></li>
+			</ul>
+			
+			<div class='tab-content'>
+		        <div class='tab-pane fade in active' id='search'>
+		            <ul><li>...search</li></ul>
+		        </div>
+		        <div class='tab-pane fade' id='ingreso'>
+		        	<article id="formIngreso" class="col-sm-4 col-sm-offset-1">			        		         
+						<form method="post" id="formIngreso"> {% csrf_token %}
+							<div class="form-group">
+							    <label for="txtmontoIngreso">Monto Ingreso: </label>
+							    <input type="text" class="form-control " id="txtmontoIngreso" />
+							</div>
+							<div class="form-group">
+							    <label for="txtFechaIngreso">Fecha Ingreso: </label>
+							    <input type="text" class="form-control " id="txtFechaIngreso"  />
+							</div>
+							<div class="form-group">
+							    <label for="txtAreaIngreso">Observacion Ingreso: </label>
+							    <textarea rows="4" cols="50" id="txtAreaIngreso" class="form-control "></textarea>	
+							</div>
+								
+							<input type="button" value="Enviar" class="btn btn-primary" onclick="enviarIngreso('I');">							
+							<input type="button" value="Volver" class="btn btn-default">
+						</form>	
+					</article>
+					<article id="listIngresos" class="col-sm-6">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<td>Fecha</td>									
+									<td align="center">Valor</td>									
+								</tr>
+							</thead>
+							<tbody>
+								{% for ingreso in ingLista %}
+								<tr>
+									<td>{{ ingreso.fechaIngreso }}</td>
+									<td align="right" cellpadding="15">{{ ingreso.totalIngreso }}</td>									
+								</tr>
+								{% empty %}
+									<td colspan="6">No hay Ingresos</td>
+								{% endfor %}
+							</tbody>
+						</table>
+					</article>				
+		        </div>
+		        <div class='tab-pane fade' id='egreso'>
+		            <article id="formEgreso" class="col-sm-4">
+						<form method="post"> {% csrf_token %}
+							<div class="form-group">
+							    <label for="txtmontoEgreso">Monto Egreso: </label>
+							    <input type="text" class="form-control " id="txtmontoEgreso" readonly placeholder="Nombre Cliente"/>
+							</div>
+							<div class="form-group">
+							    <label for="txtFechaIngreso">Fecha Egreso: </label>
+							    <input type="text" class="form-control " id="txtFechaEgreso"  placeholder="Fecha Factura"/>
+							</div>
+							<div class="form-group">
+							    <label for="txtAreaIngreso">Observacion Egreso: </label>
+							    <textarea rows="4" cols="50" id="txtAreaEgreso" class="form-control "></textarea>	
+							</div>
+								
+							<input type="button" class="btn btn-primary" onclick="enviarIngreso('I');">
+							<input type="button" value="Volver" class="btn btn-default">
+						</form>	
+					</article>
+		        </div>		       
+		    </div>		
+		</article>	
+		
+		<article>
+				
+		</article>
+	</section>
+	
+
+
+ 
+{% endblock contenido %}
+
+{% block script %}
+	<script type="text/javascript">
+		$(document).on('ready', inicio);
+	
+		function inicio()
+		{			
+			var fecha = $("#txtFechaIngreso");
+			fecha.datepicker({dateFormat: 'yy-mm-dd'});	
+			var fecha = $("#txtFechaEgreso");
+			fecha.datepicker({dateFormat: 'yy-mm-dd'});	
+		}
+		
+	
+		$('#tabs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');})    
+        	
+		
+		function enviarIngreso(mod)
+		{
+			var monto;
+			var fecha;
+			var obs;			
+			if ( mod == 'I' )
+			{
+				monto = $('#txtmontoIngreso').val();
+				fecha = $('#txtFechaIngreso').val();
+				obs = $('#txtAreaIngreso').val();
+			}
+			else
+			{
+				monto = $('#txtmontoEgreso').val();
+				fecha = $('#txtFechaEgreso').val();
+				obs = $('#txtAreaEgreso').val();
+			}
+			
+			
+			Dajaxice.caja.registroMvt(mostrarResultado, {'monto': monto,
+														 'fecha': fecha,
+														 'observacion': obs,
+														 'modulo': mod});					
+		}
+		
+		function mostrarResultado(data)
+		{
+			var div = document.getElementById('listIngresos');
+			var htmlFinal = "";
+			
+			var inicial = "<table class='table table-hover' id='tableIng'> <thead> <tr> <td>Fecha</td> "; 
+			inicial += "<td>Valor</td>  </tr> </thead> ";
+	  		
+			htmlFinal += "<tbody>";
+			
+	  		var ingresos = data.datos;
+	  		
+			for(var i=0; i<ingresos.length; ++i){
+				htmlFinal += "<tr>";
+	 			htmlFinal += "<td>" + ingresos[i].fecha + "</td>";
+	 			htmlFinal += "<td>" + ingresos[i].valor + "</td>";	 			
+	 			htmlFinal += "</tr>";
+			}
+			
+			
+			htmlFinal += "</tbody> </table>";
+		 	inicial += htmlFinal; 
+			
+			div.innerHTML = "";
+			div.innerHTML = inicial;	
+		}
+		
+		
+		
+        
+        
+
+	</script>
+	
+	<script type="text/javascript" src="{{STATIC_URL}}js/jqueryui.js"></script>
+		
+{% endblock script %}

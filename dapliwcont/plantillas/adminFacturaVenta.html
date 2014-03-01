@@ -340,8 +340,15 @@
 		else
 		{
 			$("#resultado").html('');
-			var forma_pago = $('#formaPagoCheck').val();
-			alert(forma_pago);
+			var forma_pago = document.getElementById("formaPagoCheck").checked;
+			if ( forma_pago == false )
+			{
+				forma_pago = 'C'
+			}
+			else
+			{
+				forma_pago = 'F'
+			}
 			Dajaxice.factVenta.facturar(facturaResult,{'cabeceraId': cabeceraGeneral,
 														  'formaPago' : forma_pago,
 														  'fechaFact' :	$('#txtFechaFactura').val(),				
