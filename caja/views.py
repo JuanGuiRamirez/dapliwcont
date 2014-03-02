@@ -1,4 +1,4 @@
-from caja.models import caja, ingreso
+from caja.models import caja, ingreso, egreso
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
@@ -8,8 +8,15 @@ import datetime
 
 
 def index(request):
-    ing = ingreso.objects.all()
-    return render_to_response('adminCaja.html', {'ingLista' : ing}, context_instance=RequestContext(request))
+    ing = ingreso.objects.all()[:5]
+    egr = egreso.objects.all()[:5]
+    cajas = caja.objects.all()
+    cajaOpen = caja.cajaUso.all()
+    contexto = {'ingLista' : ing, 'egrLista': egr,
+                'totalIngresos' : cajaOpen[0].totalIngresos, 'totalEgresos' : cajaOpen[0].totalEgresos,
+                'FechaInicio' : cajaOpen[0].fechaInicio,
+                'cajas' : cajas}
+    return render_to_response('adminCaja.html', contexto , context_instance=RequestContext(request))
 
 
 def rIngreso(request):

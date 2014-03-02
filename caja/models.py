@@ -20,7 +20,7 @@ class caja ( models.Model ):
     
     objects = models.Manager() 
     cajaUso = cajaUsoManager()
-    
+           
     
 
 class egreso ( models.Model ):
@@ -35,6 +35,13 @@ class egreso ( models.Model ):
     descripcion = models.CharField( max_length=120 )
     cajaId = models.ForeignKey(caja)
     
+    class Meta:
+        ordering = ['-fechaEgreso']
+    
+    def save(self):
+        super(egreso, self).save()
+        actualizarCaja(self, 'E')
+    
     
 class ingreso ( models.Model ):
     created = models.DateTimeField()
@@ -46,4 +53,24 @@ class ingreso ( models.Model ):
     totalIngreso = models.FloatField()    
     fechaIngreso = models.DateField()
     descripcion = models.CharField( max_length=120 )
-    cajaId = models.ForeignKey(caja)
+    cajaId = models.ForeignKey(caja)  
+    
+    class Meta:
+        ordering = ['-fechaIngreso']
+    
+    def save(self):
+        super(ingreso, self).save()        
+        actualizarCaja(self, 'I')
+        
+    
+
+def actualizarCaja(self, modulo):
+        id_caja = self.cajaId.id                  
+        obj = caja.objects.get(pk=id_caja)
+        if modulo == 'I':
+            obj.totalIngresos = float(obj.totalIngresos) + float(self.totalIngreso)
+        else:
+            obj.totalEgresos = float(obj.totalEgresos) + float(self.totalEgreso)
+        obj.save()
+        
+        

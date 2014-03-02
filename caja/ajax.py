@@ -33,8 +33,8 @@ def registroMvt(request, monto, fecha, observacion, modulo):
         
     
     
-    obj.save()
-    return listaMvt(modulo, cajaOpen[0].id) 
+    obj.save()    
+    return listaMvt(modulo, cajaOpen[0]) 
     
     
 
@@ -45,17 +45,21 @@ def listaMvt(mod, caja):
         prds = [{   'id' : i.pk, 
                     'fecha' : str(i.fechaIngreso), 
                     'valor' : i.totalIngreso,} 
-                    for i in ingreso.objects.filter(cajaId_id=caja) ] 
+                    for i in ingreso.objects.filter(cajaId_id=caja.id)[:1] ] 
     else:
         prds = [{   'id' : i.pk, 
-                    'fecha' : i.fechaEgreso, 
+                    'fecha' : str(i.fechaEgreso), 
                     'valor' : i.totalEgreso,} 
-                    for i in ingreso.objects.filter(cajaId_id=caja) ] 
+                    for i in egreso.objects.filter(cajaId_id=caja.id)[:1]] 
            
         
                  
     return simplejson.dumps({
                             'datos': prds,
+                            'mod' : mod,
+                            'totalIng' : caja.totalIngresos,
+                            'totalEgr' : caja.totalEgresos, 
+                            'fechaIni' : caja.fechaInicio,                            
                             }) 
 
 
