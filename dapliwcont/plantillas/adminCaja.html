@@ -17,17 +17,88 @@
 
 {% block contenido %}
 	
-	<section id="contenedor" >	
-		<article class="col-md-8 col-md-offset-2">
+	<section id="contenedor" >
+		<article  class="col-md-1>
+			<hr size="70" NOSHADE  color="red" width="100%">
+		</article>	
+		<article class="col-md-10 col-md-offset-1" id="tabs_contenedor">
 			<ul class="nav nav-tabs nav-justified" id="tabs">
-			  <li class="active"><a href="#">Caja</a></li>
+			  <li class="active"><a href="#caja">Caja</a></li>
 			  <li><a href="#ingreso">Ingresos</a></li>
 			  <li><a href="#egreso">Egresos</a></li>
 			</ul>
 			
-			<div class='tab-content'>
-		        <div class='tab-pane fade in active' id='search'>
-		            <ul><li>...search</li></ul>
+			<div class='tab-content' id="div_tab">
+		        <div class='tab-pane fade in active' id='caja'>
+		            <article  class="col-sm-4">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								Informaci&oacute;n caja en uso
+							</div>
+								<div class="panel-body">
+									<ul class="list-group">
+										<li class="list-group-item">
+											<span class="badge" id="spanBase">0</span>
+											Base
+										</li>
+										<li class="list-group-item">
+											<span class="badge" id="spanFecha">{{ FechaInicio|date:"Y-m-d" }}</span>
+											Fecha Inicio
+										</li>
+										<li class="list-group-item">
+											<span class="badge" id="spanIng">{{ totalIngresos }}</span>
+											Total Ingresos
+										</li>
+										<li class="list-group-item">
+											<span class="badge" id="spanEgr">{{ totalEgresos }}</span>
+											Total Egresos
+										</li>
+										<li class="list-group-item">
+											<span class="badge" id="spanSaldo">0</span>
+											Saldo Caja
+										</li>
+										<li class="list-group-item">
+											<p align="center">
+												<button type="button" class="btn btn-danger" onclick="validarFactura();">Cerrar Caja</button>											
+											</p>
+										</li>							 
+									</ul>															
+								</div>
+						</div>			            
+		            </article>
+		            <article  class="col-sm-8">
+		            	<div class="panel panel-primary">
+							<div class="panel-heading">
+								Cajas cerradas recientemente
+							</div>
+							<div class="panel-body">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<td>Fecha Inicial</td>									
+											<td>Fecha Final</td>
+											<td align="center">Ingresos</td>
+											<td align="center">Egresos</td>
+											<td align="center">Saldo</td>									
+										</tr>
+									</thead>
+									<tbody>
+										{% for caja in cajas %}
+										<tr>
+											<td>{{ caja.fechaInicio|date:"Y-m-d" }}</td>
+											<td>{{ caja.fechaCierre|date:"Y/m/d" }}</td>	
+											<td align="right">{{ caja.totalIngresos }}</td>
+											<td align="right">{{ caja.totalEgresos }}</td>	
+											<td align="right">{{ caja.saldoCaja }}</td>																			
+										</tr>
+										{% empty %}
+											<td colspan="6">No hay Cajas</td>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+		            </article>
 		        </div>
 		        <div class='tab-pane fade' id='ingreso'>
 		        	<article id="formIngreso" class="col-sm-4 col-sm-offset-1">			        		         
@@ -45,58 +116,89 @@
 							    <textarea rows="4" cols="50" id="txtAreaIngreso" class="form-control "></textarea>	
 							</div>
 								
-							<input type="button" value="Enviar" class="btn btn-primary" onclick="enviarIngreso('I');">							
+							<input type="button" value="Enviar" class="btn btn-primary" onclick="enviarMvt('I');">							
 							<input type="button" value="Volver" class="btn btn-default">
 						</form>	
 					</article>
 					<article id="listIngresos" class="col-sm-6">
-						<table class="table table-hover">
-							<thead>
-								<tr>
-									<td>Fecha</td>									
-									<td align="center">Valor</td>									
-								</tr>
-							</thead>
-							<tbody>
-								{% for ingreso in ingLista %}
-								<tr>
-									<td>{{ ingreso.fechaIngreso }}</td>
-									<td align="right" cellpadding="15">{{ ingreso.totalIngreso }}</td>									
-								</tr>
-								{% empty %}
-									<td colspan="6">No hay Ingresos</td>
-								{% endfor %}
-							</tbody>
-						</table>
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								&Uacute;ltimos Ingresos
+							</div>
+							<div class="panel-body">
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<td>Fecha</td>									
+											<td align="center">Valor</td>									
+										</tr>
+									</thead>
+									<tbody>
+										{% for ingreso in ingLista %}
+										<tr>
+											<td>{{ ingreso.fechaIngreso }}</td>
+											<td align="right">{{ ingreso.totalIngreso }}</td>									
+										</tr>
+										{% empty %}
+											<td colspan="6">No hay Ingresos</td>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</article>				
 		        </div>
 		        <div class='tab-pane fade' id='egreso'>
-		            <article id="formEgreso" class="col-sm-4">
+		            <article id="formEgreso" class="col-sm-4 col-sm-offset-1">
 						<form method="post"> {% csrf_token %}
 							<div class="form-group">
 							    <label for="txtmontoEgreso">Monto Egreso: </label>
-							    <input type="text" class="form-control " id="txtmontoEgreso" readonly placeholder="Nombre Cliente"/>
+							    <input type="text" class="form-control " id="txtmontoEgreso" />
 							</div>
 							<div class="form-group">
 							    <label for="txtFechaIngreso">Fecha Egreso: </label>
-							    <input type="text" class="form-control " id="txtFechaEgreso"  placeholder="Fecha Factura"/>
+							    <input type="text" class="form-control " id="txtFechaEgreso" />
 							</div>
 							<div class="form-group">
 							    <label for="txtAreaIngreso">Observacion Egreso: </label>
 							    <textarea rows="4" cols="50" id="txtAreaEgreso" class="form-control "></textarea>	
 							</div>
 								
-							<input type="button" class="btn btn-primary" onclick="enviarIngreso('I');">
+							<input type="button" class="btn btn-primary" value="Enviar" onclick="enviarMvt('E');">
 							<input type="button" value="Volver" class="btn btn-default">
 						</form>	
 					</article>
+					<article id="listEgresos" class="col-sm-6">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							&Uacute;ltimos Egresos
+						</div>
+						<div class="panel-body">
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<td>Fecha</td>									
+										<td align="center">Valor</td>									
+									</tr>
+								</thead>
+								<tbody>
+									{% for egreso in egrLista %}
+									<tr>
+										<td>{{ egreso.fechaEgreso }}</td>
+										<td align="right">{{ egreso.totalEgreso }}</td>									
+									</tr>
+									{% empty %}
+										<td colspan="6">No hay Egresos</td>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+					</article>
 		        </div>		       
 		    </div>		
-		</article>	
+		</article>		
 		
-		<article>
-				
-		</article>
 	</section>
 	
 
@@ -122,7 +224,7 @@
         $(this).tab('show');})    
         	
 		
-		function enviarIngreso(mod)
+		function enviarMvt(mod)
 		{
 			var monto;
 			var fecha;
@@ -149,29 +251,44 @@
 		
 		function mostrarResultado(data)
 		{
-			var div = document.getElementById('listIngresos');
+			if (data.mod == 'I')
+			{
+				var div = document.getElementById('listIngresos');
+			}
+			else
+			{
+				var div = document.getElementById('listEgresos');
+			}
+			
 			var htmlFinal = "";
 			
-			var inicial = "<table class='table table-hover' id='tableIng'> <thead> <tr> <td>Fecha</td> "; 
-			inicial += "<td>Valor</td>  </tr> </thead> ";
+			var inicial = "<div class='panel panel-primary'> <div class='panel-heading'> &Uacute;ltimos Ingresos </div> <div class='panel-body'>"
+			
+			inicial += "<table class='table table-hover' id='tableIng'> <thead> <tr> <td>Fecha</td> "; 
+			inicial += "<td align='center'>Valor</td>  </tr> </thead> ";
 	  		
 			htmlFinal += "<tbody>";
 			
-	  		var ingresos = data.datos;
+	  		var mvts = data.datos;
 	  		
-			for(var i=0; i<ingresos.length; ++i){
+			for(var i=0; i<mvts.length; ++i){
 				htmlFinal += "<tr>";
-	 			htmlFinal += "<td>" + ingresos[i].fecha + "</td>";
-	 			htmlFinal += "<td>" + ingresos[i].valor + "</td>";	 			
+	 			htmlFinal += "<td>" + mvts[i].fecha + "</td>";
+	 			htmlFinal += "<td align='right'>" + mvts[i].valor + "</td>";	 			
 	 			htmlFinal += "</tr>";
 			}
 			
 			
-			htmlFinal += "</tbody> </table>";
+			htmlFinal += "</tbody> </table> </div>	</div>";
 		 	inicial += htmlFinal; 
 			
 			div.innerHTML = "";
-			div.innerHTML = inicial;	
+			div.innerHTML = inicial;
+			
+						
+			document.getElementById("spanIng").innerHTML = data.totalIng;
+			document.getElementById("spanEgr").innerHTML = data.totalEgr;
+			document.getElementById("spanFecha").innerHTML = data.fechaIni;
 		}
 		
 		
