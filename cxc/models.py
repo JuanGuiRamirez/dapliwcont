@@ -10,6 +10,7 @@ class cuentaCobrar ( models.Model ):
     updatedby = models.CharField(max_length=100) 
     
     totalAbonos = models.FloatField()
+    totalDeuda = models.FloatField()
     caberaId = models.ForeignKey(cabeceraVenta)
     fechaCuenta = models.DateField()
     
