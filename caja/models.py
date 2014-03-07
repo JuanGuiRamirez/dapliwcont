@@ -11,12 +11,13 @@ class caja ( models.Model ):
     updated = models.DateTimeField()
     updatedby = models.CharField(max_length=100) 
     
+    base = models.FloatField()
     totalIngresos = models.FloatField()
     totalEgresos = models.FloatField()
     estado = models.CharField( max_length = 2 )
     saldoCaja = models.FloatField()
     fechaInicio = models.DateField()
-    fechaCierre = models.DateField()
+    fechaCierre = models.DateField(blank=True)
     
     objects = models.Manager() 
     cajaUso = cajaUsoManager()
