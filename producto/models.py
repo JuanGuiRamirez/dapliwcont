@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 class producto( models.Model ):    
@@ -18,3 +19,10 @@ class producto( models.Model ):
     
     def __str__(self):
         return self.nombre
+    
+    def clean(self):
+        if self.precioventa < self.preciocompra:
+            raise ValidationError('El precio de venta debe ser mayor que el precio de compra')
+        
+        if producto.objects.filter(codigo=self.codigo).exists():
+            raise ValidationError('Ya existe un producto con este codigo.')
