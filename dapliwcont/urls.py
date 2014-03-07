@@ -35,7 +35,10 @@ urlpatterns = patterns('',
     
     url(r'^pAjax/$', busquedaPro.as_view()),
     
-    url(r'^factV/$', 'factVenta.views.index'),    
+    url(r'^factV/$', 'factVenta.views.index'), 
+    
+    url(r'^lcc/$', 'cxc.views.index'), 
+    url(r'^abcc/$', 'cxc.views.addAbono'),   
     
     # Examples:
     # url(r'^$', 'dapliwcont.views.home', name='home'),
