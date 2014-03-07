@@ -136,7 +136,8 @@ def facturar (request, cabeceraId, formaPago, fechaFact, numFact):
         prdEdit.save()
     
     #actualizamos cabecera
-    total = actualizaCabecera('', fechaFact, numFact, cabeceraId, formaPago, 'F')
+    total = actualizaCabecera('', fechaFact, numFact, cabeceraId, formaPago, 'F')   
+    
     
     #crear cxc o mover caja    
     if formaPago == 'F' :
@@ -146,7 +147,9 @@ def facturar (request, cabeceraId, formaPago, fechaFact, numFact):
                                 updated = datetime.datetime.now(),
                                 updatedby = str(request.user.id),  
                                 totalAbonos = 0,
-                                caberaId_id = cabeceraId
+                                caberaId_id = cabeceraId,
+                                fechaCuenta = datetime.date.today(),
+                                totalDeuda = total
                               )
         cuenta.save()
     else:
