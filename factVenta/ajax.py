@@ -5,7 +5,7 @@ from django.db.models.aggregates import Sum
 from django.utils import simplejson
 from factVenta.models import productoVenta, cabeceraVenta
 from producto.models import producto
-from cxc.models import cuentaCobrar
+from cxc.models import cuentaCobrar, cabeceraCxc
 from caja.models import caja, ingreso
 import datetime
 
@@ -141,13 +141,36 @@ def facturar (request, cabeceraId, formaPago, fechaFact, numFact):
     
     #crear cxc o mover caja    
     if formaPago == 'F' :
+        cabecera = cabeceraVenta.objects.get(pk=cabeceraId)
+        cabeceraCuenta = cabeceraCxc.objects.filter(clienteId_id = cabecera.clienteId_id)
+        
+        if not cabeceraCuenta:            
+            cabeceraCuenta = cabeceraCxc(
+                                         created = datetime.datetime.now(),
+                                         createdby = str(request.user.id),
+                                         isactive = "Y",
+                                         updated = datetime.datetime.now(),
+                                         updatedby = str(request.user.id),  
+                                         totalAbonosGeneral = 0, 
+                                         totalDeudaGeneral = total,
+                                         clienteId_id = cabecera.clienteId_id
+                                         )
+            cabeceraCuenta.save()
+            cabeceraGeneralId =  cabeceraCuenta.id
+        else:
+            cabeceraCuenta[0].totalDeudaGeneral = cabeceraCuenta[0].totalDeudaGeneral + total
+            cabeceraCuenta[0].save()
+            cabeceraGeneralId =  cabeceraCuenta[0].id
+        
+        
         cuenta = cuentaCobrar(created = datetime.datetime.now(),
                                 createdby = str(request.user.id),
                                 isactive = "Y",
                                 updated = datetime.datetime.now(),
                                 updatedby = str(request.user.id),  
                                 totalAbonos = 0,
-                                caberaId_id = cabeceraId,
+                                cabeceraId_id = cabeceraGeneralId,
+                                facturaId_id = cabeceraId,
                                 fechaCuenta = datetime.date.today(),
                                 totalDeuda = total
                               )
