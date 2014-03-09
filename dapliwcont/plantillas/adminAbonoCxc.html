@@ -2,38 +2,105 @@
 
 {% block estilo %}
 	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery-ui-1.10.3.custom.min.css">
 {% endblock estilo %}	
 
 {% block contenido %}
-	<section id="contenedor"  class="col-sm-12 ">
-		<article  class="col-sm-8 ">
-			<div class="well well-sm">
-				esto es los abonos
-			</div>			
-		</article>
-		
-		<article  class="col-sm-8 ">			
-			<article  class="col-sm-6 ">
+	<section id="contenedor"  >
+		<article class="col-md-10 col-md-offset-1">
+			<article  class="col-sm-12 ">
 				<div class="well well-sm">
-					inf cuenta
-				</div>	
+					<p align="center">					  
+						  <h3> Registro de Abonos </h3>
+					</p>
+				</div>			
 			</article>
 			
-			<article  class="col-sm-6 ">
+			<article  class="col-sm-12 ">			
+				<article  class="col-sm-6 ">
+					<div class="well well-sm">
+						<ul class="list-group">
+						  <li class="list-group-item">
+						    <span class="badge" id="spanNeto">{{ cuenta.clienteId }}</span>
+						    Cliente
+						  </li>						  
+						  <li class="list-group-item">
+						    <span class="badge" id="spanNeto">{{ cuenta.totalDeudaGeneral }}</span>
+						    Valor Neto
+						  </li>
+						  <li class="list-group-item">
+						    <span class="badge" id="spanDescuento">{{ cuenta.totalAbonosGeneral }}</span>
+						    Valor Abonos
+						  </li>						  
+						  <li class="list-group-item">
+							<p align="center">
+							  <a  href="{% url cxc.views.verCxc  cuenta.id %}" class="btn btn-warning" >Ver historico de facturas</a>							  
+							</p>
+						  </li>					 
+						</ul>
+					</div>	
+				</article>
+				
+				<article  class="col-sm-6 ">
+					<div class="well well-sm">
+						<form method="post"> {% csrf_token %}
+							{{ formulario }}
+							<input type="submit" class="btn btn-primary" id="btn_submit">
+							<a href="{% url cliente.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>	
+						</form>
+					</div>	
+				</article>					
+			</article>
+			
+			<article  class="col-sm-12 ">
 				<div class="well well-sm">
-					form abonos
-				</div>	
-			</article>					
+					<article id="tablaAbonos" >				
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<td>Fecha Abono</td>									
+									<td>Saldo Anterior</td>
+									<td>Monto Abono</td>
+									<td>Saldo Final</td>									
+								</tr>
+							</thead>
+							<tbody>
+								{% for abono in ab %}
+								<tr>
+									<td>{{ abono.fechaAbono }}</td>
+									<td>{{ abono.saldoInicial }}</td>
+									<td>{{ abono.montoAbono }}</td>
+									<td>{{ abono.saldoFinal }}</td>											
+								</tr>
+								{% empty %}
+									<td colspan="6">No hay Abonos</td>
+								{% endfor %}
+							</tbody>
+						</table>
+					</article>
+				</div>			
+			</article>
+		
 		</article>
-		
-		<article  class="col-sm-8 ">
-			<div class="well well-sm">
-				abonos
-			</div>			
-		</article>
-		
-		
 	</section>
 
 {% endblock contenido %}
+
+
+{% block script %}
+	<script type="text/javascript">
+	
+	$(document).on('ready', inicio);
+	
+	function inicio()
+	{		
+		var fecha = $("#id_fechaAbono");
+		fecha.datepicker({dateFormat: 'yy-mm-dd'});			
+	}
+		
+	</script>
+	
+	<script type="text/javascript" src="{{STATIC_URL}}js/jqueryui.js"></script>	
+{% endblock script %}
+
 

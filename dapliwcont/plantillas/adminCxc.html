@@ -22,21 +22,19 @@
 				<thead>
 					<tr>
 						<td>Cliente</td>									
-						<td>Total Cuenta</td>
-						<td>Abonos</td>
-						<td>Deuda</td>
+						<td>Total Deuda</td>
+						<td>Total Abonos</td>						
 						<td></td>
 					</tr>
 				</thead>
 				<tbody>
 					{% for cuenta in cuentas %}
 					<tr>
-						<td>{{ cuenta.caberaId.clienteId }}</td>
-						<td>{{ cuenta.caberaId.totalPagar }}</td>
-						<td>{{ cuenta.totalAbonos }}</td>
-						<td>{{ cuenta.totalDeuda }}</td>
+						<td>{{ cuenta.clienteId }}</td>
+						<td>{{ cuenta.totalDeudaGeneral }}</td>
+						<td>{{ cuenta.totalAbonosGeneral }}</td>						
 						<td>
-							<a href="{% url cxc.views.addAbono %}" role="button" class="btn btn-success">
+							<a href="{% url cxc.views.addAbono cuenta.id %}" role="button" class="btn btn-success">
 								<span class="glyphicon glyphicon-euro"></span>
 							</a> 
 							<a role="button" class="btn btn-warning">
@@ -74,36 +72,3 @@
 
 {% endblock contenido %}
 
-
-{% block script %}
-	<script type="text/javascript">
-
-		var id_pro = 0;
-
-		function cargarModal(id)
-		{			
-			id_pro = id;
-			$('#myModal').modal('show');
-					
-		}
-
-		function eliminar()
-		{
-			url = '{% url producto.views.delProducto 0 %}'.replace('0', id_pro);
-			$.ajax({			
-						url: url,						
-						type: 'GET',
-						data : {formula: url},
-						success: function(data){
-							location.reload();
-						},
-						processData: false,
-						contentType: false,
-						error: function(data){
-							alert('Error de servidor');
-						}
-					});
-		}
-
-	</script>
-{% endblock script %}

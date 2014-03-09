@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block estilo %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+{% endblock estilo %}	
+
+{% block contenido %}
+	<section id="contenedor" >
+		<article id="filtroCuenta" class="col-md-10 col-md-offset-2">
+			<form action="." method="GET" class="row">
+				<div class="col-sm-4 col-xs-9">
+					<input type="text" class="form-control " name="q" value="{{ query|escape }}" placeholder="Ingrese un filtro para realizar la busqueda">
+				</div>
+				<div class="col-sm-6 col-xs-8">
+					<input type="submit" class="btn btn-info" value="Buscar">
+					<a role="button" href="{% url cxc.views.addAbono  idRegreso %}" class="btn btn-warning">Regresar</a>						
+				</div>
+			</form>	
+		</article>
+
+		<article id="tablaCuentas" class="col-md-8 col-md-offset-2">				
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>Cliente</td>									
+						<td>Total Cuenta</td>
+						<td>Fecha Cuenta</td>						
+						<td></td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for cuenta in cuentas %}
+					<tr>
+						<td>{{ cuenta.cabeceraId.clienteId }}</td>
+						<td>{{ cuenta.totalDeuda }}</td>
+						<td>{{ cuenta.fechaCuenta }}</td>						
+						<td>						
+							<a role="button" class="btn btn-warning">Detalle
+								<span class="glyphicon glyphicon-new-window"></span> 
+							</a> 
+						</td>
+						
+					</tr>
+					{% empty %}
+						<td colspan="6">No hay Cuentas</td>
+					{% endfor %}
+				</tbody>
+			</table>
+		</article>			
+	</section>
+
+{% endblock contenido %}
+
+
