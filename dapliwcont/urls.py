@@ -38,7 +38,9 @@ urlpatterns = patterns('',
     url(r'^factV/$', 'factVenta.views.index'), 
     
     url(r'^lcc/$', 'cxc.views.index'), 
-    url(r'^abcc/$', 'cxc.views.addAbono'),   
+    url(r'^abcc/(?P<cxcId>\d+)$', 'cxc.views.addAbono'),  
+    url(r'^lfcc/(?P<cxcId>\d+)$', 'cxc.views.verCxc'),  
+ 
     
     # Examples:
     # url(r'^$', 'dapliwcont.views.home', name='home'),
