@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />		
+		<meta name="viewport" 
+		content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<title>Caja</title>				
+		<link rel="stylesheet" href="{{STATIC_URL}}css/bootstrap.min.css">
+		<link rel="stylesheet" href="{{STATIC_URL}}css/estiloLogin.css">
+		<link rel="stylesheet" href="{{STATIC_URL}}css/responsive.css">
+		<link rel="stylesheet" href="{{STATIC_URL}}css/jquery-ui-1.10.3.custom.min.css">
+	</head>
+
+	<body>
+	
+	
+	<article id="rCaja">		
+		<h1>Registrar Caja Inicial</h1>	
+		
+		<div class="form-group">
+		    <label for="txtmontoIngreso">Base inicial: </label>
+		    <input type="text" class="form-control " id="txtbase" placeholder="Base Inicial"/>	
+		</div>
+		<div class="form-group">
+		    <label for="txtmontoIngreso">Fecha inicial: </label>
+		    <input type="text" class="form-control " id="txtfecha"  placeholder="Fecha Inicial"/>
+		</div>			
+		<input type="submit" class="btn btn-primary" id="btn_submit">
+		<a href="{% url cliente.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>	
+	</article>
+			
+		<script type="text/javascript" src="{{STATIC_URL}}js/jquery.js" ></script>
+		<script type="text/javascript" src="{{STATIC_URL}}js/jqueryui.js"></script>			
+		<script type="text/javascript">	
+			$(document).on('ready', inicio);
+						
+			function inicio()
+			{	
+				alert('aqui');
+				var fecha = $("#txtfecha");
+				fecha.datepicker({dateFormat: 'yy-mm-dd'});				
+			}
+		</script>
+
+	</body>
+</html>
