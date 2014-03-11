@@ -13,8 +13,10 @@ urlpatterns = patterns('',
                        
     url(dajaxice_config.dajaxice_url, include('dajaxice.urls')),
     
-    url(r'^$', 'django.contrib.auth.views.login', {'template_name':'login.html'}, name='login'),
+    url(r'^$', 'principal.views.index'),
+    url(r'^rCaja/$', 'principal.views.rCaja'),
     
+    url(r'^login$', 'django.contrib.auth.views.login', {'template_name':'login.html'}, name='login'),        
     url(r'^cerrar/$', 'django.contrib.auth.views.logout_then_login', name='logout'),
                        
     url(r'^index/$', 'producto.views.index', name = 'index'),
