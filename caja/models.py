@@ -17,7 +17,7 @@ class caja ( models.Model ):
     estado = models.CharField( max_length = 2 )
     saldoCaja = models.FloatField()
     fechaInicio = models.DateField()
-    fechaCierre = models.DateField(blank=True)
+    fechaCierre = models.DateField(blank=True, default="")
     
     objects = models.Manager() 
     cajaUso = cajaUsoManager()

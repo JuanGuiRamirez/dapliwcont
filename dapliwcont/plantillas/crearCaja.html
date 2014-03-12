@@ -16,17 +16,18 @@
 	
 	<article id="rCaja">		
 		<h1>Registrar Caja Inicial</h1>	
-		
-		<div class="form-group">
-		    <label for="txtmontoIngreso">Base inicial: </label>
-		    <input type="text" class="form-control " id="txtbase" placeholder="Base Inicial"/>	
-		</div>
-		<div class="form-group">
-		    <label for="txtmontoIngreso">Fecha inicial: </label>
-		    <input type="text" class="form-control " id="txtfecha"  placeholder="Fecha Inicial"/>
-		</div>			
-		<input type="submit" class="btn btn-primary" id="btn_submit">
-		<a href="{% url cliente.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>	
+		<form method="post" id="formBase"> {% csrf_token %}
+			<div class="form-group">
+			    <label for="txtmontoIngreso">Base inicial: </label>
+			    <input type="text" class="form-control " id="txtbase" name="txtbase" placeholder="Base Inicial"/>	
+			</div>
+			<div class="form-group">
+			    <label for="txtmontoIngreso">Fecha inicial: </label>
+			    <input type="text" class="form-control " id="txtfecha" name="txtfecha"  placeholder="Fecha Inicial"/>
+			</div>			
+			<input type="submit" class="btn btn-primary" id="btn_submit">
+			<a href="{% url cliente.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>
+		</form>	
 	</article>
 			
 		<script type="text/javascript" src="{{STATIC_URL}}js/jquery.js" ></script>
@@ -35,8 +36,7 @@
 			$(document).on('ready', inicio);
 						
 			function inicio()
-			{	
-				alert('aqui');
+			{					
 				var fecha = $("#txtfecha");
 				fecha.datepicker({dateFormat: 'yy-mm-dd'});				
 			}
