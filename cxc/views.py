@@ -1,5 +1,6 @@
 from cxc.formularios import abonoForm
 from cxc.models import cuentaCobrar, abono, cabeceraCxc
+from factVenta.models import productoVenta
 from django.contrib.auth.decorators import login_required
 from django.db.models.query_utils import Q
 from django.shortcuts import render_to_response
@@ -50,4 +51,17 @@ def addAbono(request, cxcId):
 def verCxc(request, cxcId):
     cuenta = cuentaCobrar.objects.filter(cabeceraId_id=cxcId)    
     return render_to_response('listCxc.html', {'cuentas':cuenta, 'idRegreso': cuenta[0].cabeceraId_id}, context_instance=RequestContext(request))
+
+
+@login_required(login_url='/')
+def detalleFactura(request):
+    prod =  productoVenta.objects.filter(cabecera_id = 3)
+    fact = cuentaCobrar.objects.filter(facturaId_id = 3) 
+    return render_to_response('detalleFactura.html', {'productos':prod, 'cliente': fact[0].facturaId.clienteId,
+                                                      'fecha': fact[0].facturaId.fechaFactura,
+                                                      'numFact': fact[0].facturaId.numeroFactura,
+                                                      'valNeto': fact[0].facturaId.totalNeto,
+                                                      'valDesc': fact[0].facturaId.totalDescuento,
+                                                      'valTotal': fact[0].facturaId.totalPagar},
+                               context_instance=RequestContext(request))
 

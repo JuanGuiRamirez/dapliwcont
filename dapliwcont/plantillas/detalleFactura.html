@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block estilo %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+{% endblock estilo %}	
+
+{% block contenido %}
+	<section id="contenedor" >	
+	<article  class="col-md-8 col-md-offset-2">	
+	
+		<div class="panel panel-primary">
+			<div class="panel-heading">Factura Venta</div>
+			<div class="panel-body">
+			
+				<article  >			
+					<article  class="col-sm-6 ">
+						<div class="well well-sm">
+							<ul class="list-group">
+							  <li class="list-group-item">
+							    <span class="badge" id="spanNeto">{{ cliente }}</span>
+							    Cliente
+							  </li>						  
+							  <li class="list-group-item">
+							    <span class="badge" id="spanNeto">{{ fecha }}</span>
+							    Fecha Factura
+							  </li>
+							  <li class="list-group-item">
+							    <span class="badge" id="spanDescuento">{{ numFact }}</span>
+							    Numero Factura
+							  </li>
+							  <li class="list-group-item">
+							    <span class="badge" id="spanDescuento">{{ numFact }}</span>
+							    Forma de pago
+							  </li>		 
+							</ul>
+						</div>	
+					</article>
+					<article  class="col-sm-6 ">
+						<div class="well well-sm">
+							<ul class="list-group">
+							  <li class="list-group-item">
+							    <span class="badge" id="spanNeto">{{ valNeto }}</span>
+							    Valor Neto
+							  </li>						  
+							  <li class="list-group-item">
+							    <span class="badge" id="spanNeto">{{ valDesc }}</span>
+							    Valor Abonos
+							  </li>
+							  <li class="list-group-item">
+							    <span class="badge" id="spanDescuento">{{ valTotal }}</span>
+							    Valor Pagar
+							  </li>
+							  <li class="list-group-item">								
+								 <a  href="#" >
+								 	<span class="glyphicon glyphicon-arrow-left"></span>
+								 	Ver historico de facturas
+								 </a>
+							  </li> 
+							</ul>
+						</div>	
+					</article>					
+				</article>
+				
+				<article id="tablaCuentas" >				
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<td>Producto</td>									
+								<td>Cantidad</td>
+								<td>Descuento</td>						
+								<td>valor total</td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for p in productos %}
+							<tr>
+								<td>{{ p.nombreProducto }}</td>
+								<td>{{ p.cantidad }}</td>
+								<td>{{ p.descuento }}</td>						
+								<td>{{ p.valorTotal }}</td>						
+							</tr>					
+							{% endfor %}
+						</tbody>
+					</table>
+				</article>	
+							  
+			</div>
+		</div>
+	
+	
+	
+	
+		
+			
+			
+	
+	</article>
+				
+	</section>
+
+{% endblock contenido %}
+
+

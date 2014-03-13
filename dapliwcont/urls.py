@@ -41,7 +41,8 @@ urlpatterns = patterns('',
     
     url(r'^lcc/$', 'cxc.views.index'), 
     url(r'^abcc/(?P<cxcId>\d+)$', 'cxc.views.addAbono'),  
-    url(r'^lfcc/(?P<cxcId>\d+)$', 'cxc.views.verCxc'),  
+    url(r'^lfcc/(?P<cxcId>\d+)$', 'cxc.views.verCxc'),
+    url(r'^detF/$', 'cxc.views.detalleFactura'),    
  
     
     # Examples:

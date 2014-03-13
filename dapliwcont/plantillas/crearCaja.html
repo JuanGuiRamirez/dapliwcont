@@ -16,6 +16,15 @@
 	
 	<article id="rCaja">		
 		<h1>Registrar Caja Inicial</h1>	
+		{% if errores %}
+			<div class="alert alert-danger">
+				<ul>
+					{% for e in errores %}
+						<li>{{e}}</li>
+					{% endfor %}
+				</ul>
+			</div>					
+		{% endif %}			
 		<form method="post" id="formBase"> {% csrf_token %}
 			<div class="form-group">
 			    <label for="txtmontoIngreso">Base inicial: </label>
