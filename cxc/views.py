@@ -1,10 +1,12 @@
 from cxc.formularios import abonoForm
 from cxc.models import cuentaCobrar, abono, cabeceraCxc
-from factVenta.models import productoVenta
 from django.contrib.auth.decorators import login_required
 from django.db.models.query_utils import Q
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
+from factVenta.models import productoVenta
+from reportlab.pdfgen import canvas
 import datetime
 
 
@@ -65,3 +67,12 @@ def detalleFactura(request):
                                                       'valTotal': fact[0].facturaId.totalPagar},
                                context_instance=RequestContext(request))
 
+
+def crearPDF(request):
+    response = HttpResponse(mimetype='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=primer.pdf' 
+    c = canvas.Canvas(response) 
+    c.roundRect(75,75,275,275,20,stroke=0, fill=1)
+    c.showPage()
+    c.save()
+    return response
