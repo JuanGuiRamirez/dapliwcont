@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response
 from django.template.context import RequestContext
 from factVenta.models import productoVenta
 from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 import datetime
 
 
@@ -71,8 +72,9 @@ def detalleFactura(request):
 def crearPDF(request):
     response = HttpResponse(mimetype='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=primer.pdf' 
-    c = canvas.Canvas(response) 
-    c.roundRect(75,75,275,275,20,stroke=0, fill=1)
+    c = canvas.Canvas(response, pagesize=letter) 
+    c.roundRect(50,650,200,100,20,stroke=1, fill=0)
+    c.roundRect(300,650,200,100,20,stroke=1, fill=0)
     c.showPage()
     c.save()
     return response
