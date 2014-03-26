@@ -1,0 +1,5 @@
+estado caja
+
+	estado = 'O' --> Abierta
+	estado = 'C' --> Cerrada
+	

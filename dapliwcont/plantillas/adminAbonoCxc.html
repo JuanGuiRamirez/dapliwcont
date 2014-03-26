@@ -42,11 +42,15 @@
 				</article>
 				
 				<article  class="col-sm-6 ">
+					
 					<div class="well well-sm">
+						{% if error %}
+							<div class="alert alert-danger">{{ error }}</div>							
+						{% endif %}
 						<form method="post"> {% csrf_token %}
 							{{ formulario }}
 							<input type="submit" class="btn btn-primary" id="btn_submit">
-							<a href="{% url cliente.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>	
+							<a href="{% url cxc.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>	
 						</form>
 					</div>	
 				</article>					

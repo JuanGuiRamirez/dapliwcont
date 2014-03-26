@@ -28,25 +28,33 @@ def index(request):
 @login_required(login_url='/')
 def addAbono(request, cxcId):
     cuenta = cabeceraCxc.objects.get(pk=cxcId)
+    errores = ''
     if request.method == 'POST':
-        formulario = abonoForm( request.POST )
+        formulario = abonoForm( request.POST )        
         if formulario.is_valid():
             ins_save = formulario.save( commit = False)
-            ins_save.created =  datetime.datetime.now() 
-            ins_save.createdby =  str(request.user.id)
-            ins_save.isactive = 'Y'
-            ins_save.updated = datetime.datetime.now() 
-            ins_save.updatedby =  str(request.user.id)  
-            ins_save.saldoInicial = cuenta.totalDeudaGeneral
-            ins_save.saldoFinal = cuenta.totalDeudaGeneral - ins_save.montoAbono
-            ins_save.cuentaId_id = cxcId             
-            cuenta.totalAbonosGeneral = cuenta.totalAbonosGeneral + ins_save.montoAbono
-            cuenta.totalDeudaGeneral = cuenta.totalDeudaGeneral - ins_save.montoAbono
-            ins_save.save()
-            cuenta.save()
-    formulario = abonoForm()    
-    abonos = abono.objects.filter(cuentaId_id = cxcId)
-    return render_to_response('adminAbonoCxc.html', {'cuenta':cuenta, 'ab':abonos, 'formulario':formulario}, context_instance=RequestContext(request))
+            if ins_save.montoAbono > 0:
+                ins_save.created =  datetime.datetime.now() 
+                ins_save.createdby =  str(request.user.id)
+                ins_save.isactive = 'Y'
+                ins_save.updated = datetime.datetime.now()                
+                ins_save.updatedby =  str(request.user.id)  
+                ins_save.saldoInicial = cuenta.totalDeudaGeneral
+                ins_save.saldoFinal = cuenta.totalDeudaGeneral - ins_save.montoAbono
+                ins_save.cuentaId_id = cxcId             
+                cuenta.totalAbonosGeneral = cuenta.totalAbonosGeneral + ins_save.montoAbono
+                cuenta.totalDeudaGeneral = cuenta.totalDeudaGeneral - ins_save.montoAbono
+                ins_save.save()
+                cuenta.save()
+                formulario = abonoForm() 
+            else:
+                errores = 'Ingrese un monto valido'       
+    else:
+        formulario = abonoForm()    
+    abonos = abono.objects.filter(cuentaId_id = cxcId).order_by('-created')
+    return render_to_response('adminAbonoCxc.html', 
+                              {'cuenta':cuenta, 'ab':abonos, 'formulario':formulario, 'error': errores}, 
+                              context_instance=RequestContext(request))
 
 
 
@@ -58,8 +66,8 @@ def verCxc(request, cxcId):
 
 @login_required(login_url='/')
 def detalleFactura(request):
-    prod =  productoVenta.objects.filter(cabecera_id = 3)
-    fact = cuentaCobrar.objects.filter(facturaId_id = 3) 
+    prod =  productoVenta.objects.filter(cabecera_id = 1)
+    fact = cuentaCobrar.objects.filter(facturaId_id = 1) 
     return render_to_response('detalleFactura.html', {'productos':prod, 'cliente': fact[0].facturaId.clienteId,
                                                       'fecha': fact[0].facturaId.fechaFactura,
                                                       'numFact': fact[0].facturaId.numeroFactura,
@@ -73,8 +81,16 @@ def crearPDF(request):
     response = HttpResponse(mimetype='application/pdf')
     response['Content-Disposition'] = 'attachment; filename=primer.pdf' 
     c = canvas.Canvas(response, pagesize=letter) 
-    c.roundRect(50,650,200,100,20,stroke=1, fill=0)
-    c.roundRect(300,650,200,100,20,stroke=1, fill=0)
+    c.roundRect(45,650,250,100,20,stroke=1, fill=0)
+    c.roundRect(310,650,250,100,20,stroke=1, fill=0)
+    c.roundRect(45,150,510,480,20,stroke=1, fill=0)
+    x = 50
+    y = 600
+    for i in range(300):
+        c.drawString(x, y, 'esto')        
+        y = y - 10
+        
+        
     c.showPage()
     c.save()
     return response

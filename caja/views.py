@@ -1,4 +1,5 @@
 from caja.models import caja, ingreso, egreso
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
@@ -6,11 +7,11 @@ import datetime
 
 
 
-
+@login_required(login_url='/')
 def index(request):
     ing = ingreso.objects.all()[:5]
     egr = egreso.objects.all()[:5]
-    cajas = caja.objects.all()
+    cajas = caja.objects.filter(estado='C')
     cajaOpen = caja.cajaUso.all()
     contexto = {'ingLista' : ing, 'egrLista': egr,
                 'totalIngresos' : cajaOpen[0].totalIngresos, 'totalEgresos' : cajaOpen[0].totalEgresos,
@@ -18,7 +19,7 @@ def index(request):
                 'cajas' : cajas}
     return render_to_response('adminCaja.html', contexto , context_instance=RequestContext(request))
 
-
+@login_required(login_url='/')
 def rIngreso(request):
     cajaOpen = caja.cajaUso.all()    
     
