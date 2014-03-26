@@ -1,5 +1,6 @@
 from cliente.formularios import clienteForms
 from cliente.models import cliente
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
@@ -8,7 +9,7 @@ import datetime
 
 
 
-
+@login_required(login_url='/')
 def index(request):
     query = request.GET.get('q','')    
     if query:
@@ -20,7 +21,7 @@ def index(request):
     return render_to_response('adminCliente.html', {'clientes':lista_clientes}, context_instance=RequestContext(request))
 
 
-
+@login_required(login_url='/')
 def registro(request):
     titulo = 'Registrar Tercero'
     if request.method == "POST":
@@ -39,7 +40,7 @@ def registro(request):
     return render_to_response('crudCliente.html', {"formulario":formulario, "titulo":titulo,}, 
             context_instance= RequestContext(request))
     
-
+@login_required(login_url='/')
 def editarCliente(request, cliente_id):
     titulo = 'Editar Tercero'
     mensaje = ''
@@ -59,7 +60,7 @@ def editarCliente(request, cliente_id):
         {'formulario':formulario, "mensaje":mensaje, "titulo":titulo, "error":error}, 
         context_instance = RequestContext(request) )
 
-
+@login_required(login_url='/')
 def delCliente(request, cliente_id):
     if request.is_ajax and request.method == "GET":
         cliente_eliminar = cliente.objects.get(pk=cliente_id)
