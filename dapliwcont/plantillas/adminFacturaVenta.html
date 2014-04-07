@@ -111,7 +111,7 @@
 						<input type="text" id="txtDescuentoPrd" class="form-control" placeholder="Descuento">						
 					</div>	
 					<div class="col-sm-2">			   			
-						<button type="button" class="btn btn-primary" onclick="adicionarPrdVenta();">Adicionar</button>						
+						<button type="button" class="btn btn-primary" onclick="adicionarValProducto();">Adicionar</button>						
 					</div>			   
 			   </div>			
 		</article>
@@ -180,6 +180,43 @@
 			</div><!-- /.modal-dialog -->
 		</article><!-- /.modal -->	
 		
+		
+		<!-- modal para terminar factura -->
+		<article class="modal fade" id="modalTerminarFactura" >
+			<div class="modal-dialog ">
+				<div class="modal-content">
+					<div class="modal-header">						
+						<h4 class="modal-title">Factura de venta</h4>
+					</div>
+					<div class="modal-body">
+						<h5>La factura se ha generado correctamente</h5>						
+					</div>
+					<div class="modal-footer">						
+						<a type="button" class="btn btn-primary" href="{% url factVenta.views.imprimirFact %}" data-toggle="modal">Imprimir Factura</a>
+						<a class="btn btn-default" id="btnDel" href="/factV/"  data-toggle="modal">Continuar</a>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</article><!-- /.modal -->	
+		
+		<!-- modal para cantidad producto -->
+		<article class="modal fade" id="modalValidarProducto" >
+			<div class="modal-dialog ">
+				<div class="modal-content">
+					<div class="modal-header">						
+						<h4 class="modal-title">Cantidad de producto</h4>
+					</div>
+					<div class="modal-body">
+						<p>La cantidad disponible del producto no es suficiente, desea continuar con la operacion?</p>						
+					</div>
+					<div class="modal-footer">						
+						<a type="button" class="btn btn-primary" onclick="valCantidadProd();" data-toggle="modal">Continuar Operacion</a>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</article><!-- /.modal -->
+		
 	</section>
 {% endblock contenido %}
 
@@ -190,12 +227,15 @@
 	$(document).on('ready', inicio);
 	var cabeceraGeneral;
 	var id_prod;
+	var mod;
 	
 	function inicio()
 	{		
 		var fecha = $("#txtFechaFactura");
 		fecha.datepicker({dateFormat: 'yy-mm-dd'});
 		cabeceraGeneral = {{ cabecera }};	
+		
+		
 	}
 	
 	function cargarModalEliminar(prd_id)
@@ -209,8 +249,8 @@
 		$('#myModal').modal('show');				
 	}
 	
-	function NitProducto()
-	{				
+	function NitValProducto()
+	{
 		getProducto(document.getElementById("txtNitProducto").value); 
 	}
 	
@@ -219,10 +259,48 @@
 														 'cabeceraId': cabeceraGeneral});
 	}
 	
-	function listarProductos(data){	
+	function NitProducto()
+	{		
+		validarProducto(document.getElementById("txtNitProducto").value, 'DI', 1); 
+	}
+	
+	function validarProducto(codigo_prod, modu, cantidad){		
+		Dajaxice.factVenta.validarProductos(finValidar,{'codigoPrd': codigo_prod,
+														'modulo': modu,
+														'cantidad': cantidad,
+														'cabeceraId': cabeceraGeneral});
+	}
+
+	function finValidar(data)
+	{
 		$('#modalEliminar').modal('hide');
 		$('#myModal').modal('hide');
+		mod = data.mod;
 		
+		
+		var err = data.error;
+		if ( err == '1' )
+		{
+			$('#modalValidarProducto').modal('show');
+		}
+		else
+		{
+			valCantidadProd();			
+		}
+	}
+	
+	function valCantidadProd()
+	{
+		if ( mod == 'DI' )
+		{
+			NitValProducto();
+		}else{
+			adicionarPrdVenta();
+		}
+	}
+	
+	function listarProductos(data){	
+		$('#modalValidarProducto').modal('hide');
 		var div = document.getElementById('listPrductoVenta');
 		var htmlFinal = "";
 		
@@ -281,6 +359,12 @@
 	{		
 		Dajaxice.factVenta.eliminarPrd(listarProductos,{'numPrd': id_prod,
 														'cabeceraId': cabeceraGeneral});	
+	}
+	
+	function adicionarValProducto()
+	{		
+		validarProducto(document.getElementById("txtProductoCargado").value, 'AD',
+						document.getElementById("txtCantidadPrd").value); 
 	}
 	
 	function adicionarPrdVenta()
@@ -356,9 +440,22 @@
 		}
 	}
 	
-	function facturaResult(datas)
-	{
-		alert('fue y volvio');
+	function facturaResult(data)
+	{	
+		
+		if( data.err != 'C')
+		{
+			$('#modalTerminarFactura').modal({
+				backdrop: 'static',
+				show : true
+			});			
+		}else{
+			texto = 'El cliente no dispone de cupo en su cuenta para esta venta';
+			$("#resultado").html('<div class="alert alert-danger">' + texto + '</div>');
+		}
+
+		
+		
 	}
 	
 	</script>
