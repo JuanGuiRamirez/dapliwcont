@@ -24,5 +24,6 @@ class producto( models.Model ):
         if self.precioventa < self.preciocompra:
             raise ValidationError('El precio de venta debe ser mayor que el precio de compra')
         
-        if producto.objects.filter(codigo=self.codigo).exists():
-            raise ValidationError('Ya existe un producto con este codigo.')
+        if self.pk == None:
+            if producto.objects.filter(codigo=self.codigo).exists():
+                raise ValidationError('Ya existe un producto con este codigo.')
