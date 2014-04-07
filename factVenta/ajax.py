@@ -34,6 +34,30 @@ def getProductos(request, codigoPrd, cabeceraId):
             productoxVenta.save()   
                  
         return listaProductos(cabeceraId)
+
+
+@dajaxice_register
+def validarProductos(request, codigoPrd, modulo, cantidad, cabeceraId):
+    if codigoPrd:
+        error = ''
+        cantidadValidar = 0
+        if modulo == 'DI':
+            productoajax = producto.objects.filter(codigo=codigoPrd)[:1]
+            prdVenta = productoVenta.objects.filter(productoId_id=productoajax[0].id, cabecera_id = cabeceraId )
+            if prdVenta:
+                cantidadValidar = prdVenta[0].cantidad + 1
+            else:
+                cantidadValidar = 1
+        else:
+            prdVenta = productoVenta.objects.filter(pk=codigoPrd) 
+            productoajax = producto.objects.filter(pk=prdVenta[0].productoId_id)[:1]
+            cantidadValidar = cantidad            
+        if productoajax[0].cantidad <= cantidadValidar:
+            error = '1'
+        else:
+            error = '0'
+        return simplejson.dumps({'error': error,
+                                 'mod': modulo }) 
     
     
     
@@ -129,64 +153,83 @@ def listaProductos(cabeceraId):
 
 @dajaxice_register
 def facturar (request, cabeceraId, formaPago, fechaFact, numFact):
-    #actualizamos el inventario
-    for i in productoVenta.objects.filter(cabecera_id=cabeceraId):
-        prdEdit = producto.objects.get(pk=i.productoId_id)
-        prdEdit.cantidad = prdEdit.cantidad - i.cantidad
-        prdEdit.save()
-    
-    #actualizamos cabecera
-    total = actualizaCabecera('', fechaFact, numFact, cabeceraId, formaPago, 'F')   
-    
-    
-    #crear cxc o mover caja    
+    error = None
+    cabecera = cabeceraVenta.objects.get(pk=cabeceraId)
+    #validados si el tercero tiene credito
     if formaPago == 'F' :
-        cabecera = cabeceraVenta.objects.get(pk=cabeceraId)
-        cabeceraCuenta = cabeceraCxc.objects.filter(clienteId_id = cabecera.clienteId_id)
+        limiteCredito =  cabecera.clienteId.limitecredito
+        if not limiteCredito == 0:
+            if limiteCredito < cabecera.totalPagar + cabecera.clienteId.saldodeuda:
+                error = 'C'
+            
+    if error == None:
+        #actualizamos el inventario
+        for i in productoVenta.objects.filter(cabecera_id=cabeceraId):
+            prdEdit = producto.objects.get(pk=i.productoId_id)
+            prdEdit.cantidad = prdEdit.cantidad - i.cantidad
+            prdEdit.save()
         
-        if not cabeceraCuenta:            
-            cabeceraCuenta = cabeceraCxc(
-                                         created = datetime.datetime.now(),
-                                         createdby = str(request.user.id),
-                                         isactive = "Y",
-                                         updated = datetime.datetime.now(),
-                                         updatedby = str(request.user.id),  
-                                         totalAbonosGeneral = 0, 
-                                         totalDeudaGeneral = total,
-                                         clienteId_id = cabecera.clienteId_id
-                                         )
-            cabeceraCuenta.save()
-            cabeceraGeneralId =  cabeceraCuenta.id
+        #actualizamos cabecera
+        total = actualizaCabecera('', fechaFact, numFact, cabeceraId, formaPago, 'F')   
+        
+        
+        #crear cxc o mover caja    
+        if formaPago == 'F' :
+            cabeceraCuenta = cabeceraCxc.objects.filter(clienteId_id = cabecera.clienteId_id)
+            
+            if not cabeceraCuenta:            
+                cabeceraCuenta = cabeceraCxc(
+                                             created = datetime.datetime.now(),
+                                             createdby = str(request.user.id),
+                                             isactive = "Y",
+                                             updated = datetime.datetime.now(),
+                                             updatedby = str(request.user.id),  
+                                             totalAbonosGeneral = 0, 
+                                             totalDeudaGeneral = total,
+                                             clienteId_id = cabecera.clienteId_id
+                                             )
+                cabeceraCuenta.save()
+                cabeceraGeneralId =  cabeceraCuenta.id
+            else:
+                cabeceraCuenta[0].totalDeudaGeneral = cabeceraCuenta[0].totalDeudaGeneral + total
+                cabeceraCuenta[0].save()
+                cabeceraGeneralId =  cabeceraCuenta[0].id
+            
+            
+            cuenta = cuentaCobrar(created = datetime.datetime.now(),
+                                    createdby = str(request.user.id),
+                                    isactive = "Y",
+                                    updated = datetime.datetime.now(),
+                                    updatedby = str(request.user.id),  
+                                    totalAbonos = 0,
+                                    cabeceraId_id = cabeceraGeneralId,
+                                    facturaId_id = cabeceraId,
+                                    fechaCuenta = datetime.date.today(),
+                                    totalDeuda = total
+                                  )
+            cuenta.save()
+            
+            #actualizo el saldo deuda de cliente
+            cliente = cabecera.clienteId
+            cliente.saldodeuda = cliente.saldodeuda + cabecera.totalPagar
+            cliente.save()
+            
         else:
-            cabeceraCuenta[0].totalDeudaGeneral = cabeceraCuenta[0].totalDeudaGeneral + total
-            cabeceraCuenta[0].save()
-            cabeceraGeneralId =  cabeceraCuenta[0].id
-        
-        
-        cuenta = cuentaCobrar(created = datetime.datetime.now(),
-                                createdby = str(request.user.id),
-                                isactive = "Y",
-                                updated = datetime.datetime.now(),
-                                updatedby = str(request.user.id),  
-                                totalAbonos = 0,
-                                cabeceraId_id = cabeceraGeneralId,
-                                facturaId_id = cabeceraId,
-                                fechaCuenta = datetime.date.today(),
-                                totalDeuda = total
-                              )
-        cuenta.save()
-    else:
-        cajaUso = caja.objects.filter(estado='O')
-        ing = ingreso(created = datetime.datetime.now(),
-                        createdby = str(request.user.id),
-                        isactive = "Y",
-                        updated = datetime.datetime.now(),
-                        updatedby = str(request.user.id),                      
-                        totalIngreso =  total , 
-                        fechaIngreso = datetime.datetime.now(),
-                        descripcion = 'Venta de contado',
-                        cajaId = cajaUso[0].id                      
-                      )
-        ing.save()
+            cajaUso = caja.objects.filter(estado='O')
+            ing = ingreso(created = datetime.datetime.now(),
+                            createdby = str(request.user.id),
+                            isactive = "Y",
+                            updated = datetime.datetime.now(),
+                            updatedby = str(request.user.id),                      
+                            totalIngreso =  total , 
+                            fechaIngreso = datetime.datetime.now(),
+                            descripcion = 'Venta de contado',
+                            cajaId = cajaUso[0].id                      
+                          )
+            ing.save()
+    
+    return simplejson.dumps({ 
+                            'err' : error
+                            })
 
     

@@ -39,3 +39,7 @@ class productoVenta( models.Model ):
     
     def __str__(self):
         self.productoId
+        
+
+def armarCadena():
+    pass
