@@ -22,7 +22,8 @@ class cliente( models.Model ):
         return self.nombre
     
     def clean(self):
-        if cliente.objects.filter(identificacion=self.identificacion).exists():
-            raise ValidationError('Ya existe un tercero con este numero de identificacion.')
+        if self.pk == None:
+            if cliente.objects.filter(identificacion=self.identificacion).exists():
+                raise ValidationError('Ya existe un tercero con este numero de identificacion.')
             
         

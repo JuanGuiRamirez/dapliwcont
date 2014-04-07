@@ -53,7 +53,7 @@ def editarCliente(request, cliente_id):
             ins_save.updated = datetime.datetime.now()
             ins_save.updatedby = str(request.user.id)            
             ins_save.save()
-            return HttpResponseRedirect('/')            
+            return HttpResponseRedirect('/rclis')            
     else:
         formulario = clienteForms( instance=cliente_edit )
     return render_to_response('crudCliente.html', 
