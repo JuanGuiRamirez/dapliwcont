@@ -2,26 +2,24 @@
 	
 {% block estilo %}
 	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}css/dataTables.bootstrap.css">
 {% endblock estilo %}
 
 
 {% block contenido %}
 	<section id="contenedor" >
 
-		<article id="filtroCliente" class="col-md-10 col-md-offset-2">
-			<form action="." method="GET" class="row">
-				<div class="col-sm-4 col-xs-9">
-					<input type="text" class="form-control " name="q" value="{{ query|escape }}" placeholder="Ingrese un filtro para realizar la busqueda">
+		<article id="filtroCliente" class="col-md-8 col-md-offset-2">
+				<div class="col-md-4" id="lblTitulo">
+					<h2>Lista de terceros</h2>
 				</div>
-				<div class="col-sm-6 col-xs-8">
-					<input type="submit" class="btn btn-info" value="Buscar">
-					<a href="{% url cliente.views.registro %}" class="btn btn-primary">Agregar Tercero</a>	
-				</div>
-			</form>	
-		</article>
+				<div class="col-md-4 col-md-offset-4 text-right"  id="btnTitulo">
+					<a href="{% url cliente.views.registro %}" class="btn btn-primary" id="btnAgregarTercero" >Agregar Tercero</a>
+				</div>										
+		</article> 
 		
-		<article id="tablaClientes" class="col-md-8 col-md-offset-2">				
-			<table class="table table-hover">
+		<article id="tablaClientes" class="col-md-8 col-md-offset-2">						
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="tablaCli" width="100%">
 				<thead>
 					<tr>
 						<td>Identificacion</td>									
@@ -78,7 +76,39 @@
 
 
 {% block script %}
+
+	<script type="text/javascript" language="javascript" src="{{STATIC_URL}}js/jquery.dataTables.js"></script>
+	<script type="text/javascript" language="javascript" src="{{STATIC_URL}}js/dataTables.bootstrap.js"></script>
+
+	
 	<script type="text/javascript">
+	
+		$(document).ready(function(){
+		    $('#tablaCli').dataTable({
+		    	'oLanguage': {
+		    		"sSearch": "Buscar:",
+		    		"sProcessing": "Procesando...",
+		    		"sEmptyTable": "Ningun dato disponible en esta tabla",
+		    		"sZeroRecords": "No se encontraron resultados",
+		    		"sLengthMenu": "Mostrar _MENU_ registros",
+		    		"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+		    		"sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+		    		"sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+		    		"sInfoPostFix": "",
+		    		"sUrl": "",
+		    		"sLoadingRecords": "Cargando...",
+		    		"sInfoThousands": ",",
+		    		"oPaginate": {
+						"sFirst": "Primero",
+						"sLast": "Ultimo",
+						"sNext": "Siguiente",
+						"sPrevious": "Anterior"
+					},
+					"fnInfoCallback": null,
+				}
+		    });
+		    
+		});
 
 		var id_cli = 0;
 
