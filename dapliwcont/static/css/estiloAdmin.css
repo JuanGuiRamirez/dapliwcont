@@ -13,11 +13,6 @@ table thead td
 	font-weight: bold;
 }
 
-#filtroProducto div
-{
-	margin-bottom: 1em;
-}
-
 #btn_submit, #btn_volver
 {
 	margin-top: 0.5em;
@@ -40,17 +35,30 @@ table thead td
 	border-left: 2px solid black;
 }
 
-#filtroProducto, #filtroCliente
-{	
-	padding: 1em;	
+
+#filtroCliente, #filtroProducto
+{			
+	padding-top: 0;
+	padding-left: 0;
+	margin-top: 0;	
 }
+
+#filtroCliente h2, #filtroProducto h2
+{			
+	text-align : left;
+	margin-top: 0;
+	margin-left: 0;	
+}
+
+#lblTitulo, #btnTitulo
+{	
+	padding-right: 0;
+	padding-left: 8px;
+}
+
+
 
 #tablaProductos
 {
 	padding: 1em;
 }
-
-
-
-
-
