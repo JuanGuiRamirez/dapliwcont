@@ -44,9 +44,7 @@
 								<span class="glyphicon glyphicon-trash"></span> 
 							</a> 
 						</td>	
-					</tr>
-					{% empty %}
-						<td colspan="6">No hay Terceros</td>
+					</tr>					
 					{% endfor %}
 				</tbody>
 			</table>
@@ -83,12 +81,15 @@
 	
 	<script type="text/javascript">
 	
-		$(document).ready(function(){
-		    $('#tablaCli').dataTable({
+		$(document).on('ready', inicio);
+		
+		function inicio()
+		{		
+			$('#tablaCli').dataTable({
 		    	'oLanguage': {
 		    		"sSearch": "Buscar:",
 		    		"sProcessing": "Procesando...",
-		    		"sEmptyTable": "Ningun dato disponible en esta tabla",
+		    		"sEmptyTable": "No hay terceros disponibles",
 		    		"sZeroRecords": "No se encontraron resultados",
 		    		"sLengthMenu": "Mostrar _MENU_ registros",
 		    		"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
@@ -106,9 +107,9 @@
 					},
 					"fnInfoCallback": null,
 				}
-		    });
-		    
-		});
+		    });			
+		}
+	
 
 		var id_cli = 0;
 
