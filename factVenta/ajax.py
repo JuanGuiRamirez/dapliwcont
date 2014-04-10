@@ -215,7 +215,7 @@ def facturar (request, cabeceraId, formaPago, fechaFact, numFact):
             cliente.save()
             
         else:
-            cajaUso = caja.objects.filter(estado='O')
+            cajaUso = caja.cajaUso.all()
             ing = ingreso(created = datetime.datetime.now(),
                             createdby = str(request.user.id),
                             isactive = "Y",
@@ -224,7 +224,7 @@ def facturar (request, cabeceraId, formaPago, fechaFact, numFact):
                             totalIngreso =  total , 
                             fechaIngreso = datetime.datetime.now(),
                             descripcion = 'Venta de contado',
-                            cajaId = cajaUso[0].id                      
+                            cajaId_id = cajaUso[0].id                      
                           )
             ing.save()
     
