@@ -16,7 +16,7 @@ def index(request):
     contexto = {'ingLista' : ing, 'egrLista': egr,
                 'totalIngresos' : cajaOpen[0].totalIngresos, 'totalEgresos' : cajaOpen[0].totalEgresos,
                 'FechaInicio' : cajaOpen[0].fechaInicio,
-                'cajas' : cajas}
+                'cajas' : cajas, 'base': cajaOpen[0].base}
     return render_to_response('adminCaja.html', contexto , context_instance=RequestContext(request))
 
 @login_required(login_url='/')
