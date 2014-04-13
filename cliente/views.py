@@ -17,7 +17,7 @@ def index(request):
         Q(nombre__icontains=query))
         lista_clientes = cliente.objects.filter(qset).distinct()
     else:
-        lista_clientes =  cliente.objects.all()        
+        lista_clientes =  cliente.objects.filter(isactive='Y')       
     return render_to_response('adminCliente.html', {'clientes':lista_clientes}, context_instance=RequestContext(request))
 
 
@@ -64,7 +64,10 @@ def editarCliente(request, cliente_id):
 def delCliente(request, cliente_id):
     if request.is_ajax and request.method == "GET":
         cliente_eliminar = cliente.objects.get(pk=cliente_id)
-        cliente_eliminar.delete()
+        cliente_eliminar.isactive = 'N'
+        cliente_eliminar.updated = datetime.datetime.now()
+        cliente_eliminar.updatedby = str(request.user.id)
+        cliente_eliminar.save()        
         return HttpResponseRedirect('/')
     else:
         return Http404

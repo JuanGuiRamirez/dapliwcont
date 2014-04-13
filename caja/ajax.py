@@ -45,12 +45,12 @@ def listaMvt(mod, caja):
         prds = [{   'id' : i.pk, 
                     'fecha' : str(i.fechaIngreso), 
                     'valor' : i.totalIngreso,} 
-                    for i in ingreso.objects.filter(cajaId_id=caja.id)[:5] ] 
+                    for i in ingreso.objects.filter(cajaId_id=caja.id).order_by('-created')[:5] ] 
     else:
         prds = [{   'id' : i.pk, 
                     'fecha' : str(i.fechaEgreso), 
                     'valor' : i.totalEgreso,} 
-                    for i in egreso.objects.filter(cajaId_id=caja.id)[:5]] 
+                    for i in egreso.objects.filter(cajaId_id=caja.id).order_by('-created')[:5]] 
            
         
                  

@@ -3,3 +3,10 @@ estado caja
 	estado = 'O' --> Abierta
 	estado = 'C' --> Cerrada
 	
+	
+eliminar y editar
+
+	No se permite ni editar ni eliminar los ingresos ni los egresos 
+	ya que esta manipulacion puede provocar errores a la hora de hacer cuadre de caja
+	por lo tanto si se equivocan con un ingreso pues seria hacer lo contrario que es el egreso por el mismo valor 
+	y con la misma fecha

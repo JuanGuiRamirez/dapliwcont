@@ -33,11 +33,11 @@ class egreso ( models.Model ):
     
     totalEgreso = models.FloatField()    
     fechaEgreso = models.DateField()
-    descripcion = models.CharField( max_length=120 )
+    descripcion = models.CharField( max_length=255 )
     cajaId = models.ForeignKey(caja)
     
     class Meta:
-        ordering = ['-fechaEgreso']
+        ordering = ['-created']
     
     def save(self):
         super(egreso, self).save()
@@ -53,11 +53,11 @@ class ingreso ( models.Model ):
     
     totalIngreso = models.FloatField()    
     fechaIngreso = models.DateField()
-    descripcion = models.CharField( max_length=120 )
+    descripcion = models.CharField( max_length=255 )
     cajaId = models.ForeignKey(caja)  
     
     class Meta:
-        ordering = ['-fechaIngreso']
+        ordering = ['-created']
     
     def save(self):
         super(ingreso, self).save()        

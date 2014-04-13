@@ -34,37 +34,19 @@ def rIngreso(request):
                         cajaId = cajaOpen[0].id  )                     
     obj.save()
     
+@login_required(login_url='/')
+def listarDetalle(request, mod):
+    titulo = ''
+    if mod == 'I':
+        mvts = ingreso.objects.all()
+        titulo = 'Lista de ingresos'
+    else:
+        mvts = egreso.objects.all()
+        titulo = 'Lista de egresos'        
+    return render_to_response('listDetalleCaja.html', { 'mvts' : mvts, 'mod' : mod, 
+                                                       'titulo' : titulo },  context_instance=RequestContext(request))
     
     
-    
-   
-    
-    
-#def index(request):
-#    if request.method == "POST":
-#        data = str(request.POST.copy())        
-#        dif = data.find("totalIngreso")
-#        if dif:
-#            form = ingresoForm(request.POST)
-#        else:
-#            form = egresoForm(request.POST)            
-#        if form.is_valid():
-#            ins_save = form.save( commit = False)
-#            ins_save.created = datetime.datetime.now() 
-#            ins_save.createdby = str(request.user.id)
-#            ins_save.isactive = 'Y'
-#            ins_save.updated = datetime.datetime.now() 
-#            ins_save.updatedby = str(request.user.id)
-#            ins_save.save()
-#            return HttpResponseRedirect('/clis') 
-#    else:         
-#        formularioIngreso = ingresoForm()   
-#        formularioEgreso = egresoForm()              
-#    return render_to_response('adminCaja.html', 
-#                              {'ingresoForm' : formularioIngreso, 'egresoForm' : formularioEgreso}, 
-#                              context_instance=RequestContext(request))
-
-
    
 
 
