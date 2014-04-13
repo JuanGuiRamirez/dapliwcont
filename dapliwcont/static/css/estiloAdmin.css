@@ -36,14 +36,14 @@ table thead td
 }
 
 
-#filtroCliente, #filtroProducto
+#filtroCliente, #filtroProducto, #filtroMvts
 {			
 	padding-top: 0;
 	padding-left: 0;
 	margin-top: 0;	
 }
 
-#filtroCliente h2, #filtroProducto h2
+#filtroCliente h2, #filtroProducto h2, #filtroMvts h2
 {			
 	text-align : left;
 	margin-top: 0;
@@ -58,7 +58,7 @@ table thead td
 
 
 
-#tablaProductos, #tablaClientes
+#tablaProductos, #tablaClientes, #tablaGeneral
 {
 	padding: 1em;
 }

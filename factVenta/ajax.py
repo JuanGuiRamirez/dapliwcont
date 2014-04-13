@@ -13,7 +13,7 @@ import datetime
 @dajaxice_register
 def getProductos(request, codigoPrd, cabeceraId):
     if codigoPrd:
-        productoajax = producto.objects.filter(codigo=codigoPrd)[:1] 
+        productoajax = producto.objects.filter(codigo=codigoPrd, isactive='Y')[:1] 
         countProductos = productoVenta.objects.filter(cabecera_id=cabeceraId).filter(productoId_id = productoajax[0].id)[:1]
         if countProductos:
             countProductos[0].cantidad = countProductos[0].cantidad  + 1

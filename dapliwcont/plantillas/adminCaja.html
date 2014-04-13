@@ -17,10 +17,7 @@
 
 {% block contenido %}
 	
-	<section id="contenedor" >
-		<article  class="col-md-1>
-			<hr size="70" NOSHADE  color="red" width="100%">
-		</article>	
+	<section id="contenedor" >		
 		<article class="col-md-10 col-md-offset-1" id="tabs_contenedor">
 			<ul class="nav nav-tabs nav-justified" id="tabs">
 			  <li class="active"><a href="#caja">Caja</a></li>
@@ -115,35 +112,47 @@
 							    <label for="txtAreaIngreso">Observacion Ingreso: </label>
 							    <textarea rows="4" cols="50" id="txtAreaIngreso" class="form-control "></textarea>	
 							</div>
-								
+							
 							<input type="button" value="Enviar" class="btn btn-primary" onclick="enviarMvt('I');">							
 							<input type="button" value="Volver" class="btn btn-default">
+							
+								
+							
+							
+							
+							
 						</form>	
 					</article>
 					<article id="listIngresos" class="col-sm-6">
+						<div id="resultadoIngreso">							
+			   			</div>
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								&Uacute;ltimos Ingresos
 							</div>
 							<div class="panel-body">
+								<a  href="{% url caja.views.listarDetalle 'I' %}" >
+								 	<span class="glyphicon glyphicon-list-alt"></span>
+								 	 Ver todos los ingresos...
+								 </a>
 								<table class="table table-hover">
 									<thead>
 										<tr>
 											<td>Fecha</td>									
-											<td align="center">Valor</td>									
+											<td align="center">Valor</td>																			
 										</tr>
 									</thead>
 									<tbody>
 										{% for ingreso in ingLista %}
 										<tr>
 											<td>{{ ingreso.fechaIngreso }}</td>
-											<td align="right">{{ ingreso.totalIngreso }}</td>									
+											<td align="right">{{ ingreso.totalIngreso }}</td>																				
 										</tr>
 										{% empty %}
 											<td colspan="6">No hay Ingresos</td>
-										{% endfor %}
+										{% endfor %}										
 									</tbody>
-								</table>
+								</table>								
 							</div>
 						</div>
 					</article>				
@@ -169,31 +178,37 @@
 						</form>	
 					</article>
 					<article id="listEgresos" class="col-sm-6">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
-							&Uacute;ltimos Egresos
+						<div id="resultadoEgreso">							
+			   			</div>
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								&Uacute;ltimos Egresos
+							</div>
+							<div class="panel-body">
+								<a href="{% url caja.views.listarDetalle 'E' %}" >
+								 	<span class="glyphicon glyphicon-list-alt"></span>
+								 	 Ver todos los egresos...
+								</a>
+								<table class="table table-hover">
+									<thead>
+										<tr>
+											<td>Fecha</td>									
+											<td align="center">Valor</td>									
+										</tr>
+									</thead>
+									<tbody>
+										{% for egreso in egrLista %}
+										<tr>
+											<td>{{ egreso.fechaEgreso }}</td>
+											<td align="right">{{ egreso.totalEgreso }}</td>									
+										</tr>
+										{% empty %}
+											<td colspan="6">No hay Egresos</td>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
 						</div>
-						<div class="panel-body">
-							<table class="table table-hover">
-								<thead>
-									<tr>
-										<td>Fecha</td>									
-										<td align="center">Valor</td>									
-									</tr>
-								</thead>
-								<tbody>
-									{% for egreso in egrLista %}
-									<tr>
-										<td>{{ egreso.fechaEgreso }}</td>
-										<td align="right">{{ egreso.totalEgreso }}</td>									
-									</tr>
-									{% empty %}
-										<td colspan="6">No hay Egresos</td>
-									{% endfor %}
-								</tbody>
-							</table>
-						</div>
-					</div>
 					</article>
 		        </div>		       
 		    </div>		
@@ -221,6 +236,8 @@
 	
 		$('#tabs a').click(function (e) {
         e.preventDefault();
+        $("#resultadoIngreso").html('');
+		$("#resultadoEgreso").html('');
         $(this).tab('show');})    
         	
 		
@@ -228,45 +245,111 @@
 		{
 			var monto;
 			var fecha;
-			var obs;			
+			var obs;
+			var texto = '<ul>';
+			var bandera = 'N';
+						
 			if ( mod == 'I' )
 			{
 				monto = $('#txtmontoIngreso').val();
 				fecha = $('#txtFechaIngreso').val();
-				obs = $('#txtAreaIngreso').val();
+				obs = $('#txtAreaIngreso').val();				
 			}
 			else
 			{
 				monto = $('#txtmontoEgreso').val();
 				fecha = $('#txtFechaEgreso').val();
-				obs = $('#txtAreaEgreso').val();
+				obs = $('#txtAreaEgreso').val();				
 			}
 			
 			
-			Dajaxice.caja.registroMvt(mostrarResultado, {'monto': monto,
-														 'fecha': fecha,
-														 'observacion': obs,
-														 'modulo': mod});					
+			if (monto == '')
+			{
+				texto = texto + '<li>Debe ingresar un monto mayor a cero</li>';
+				bandera = 'Y';
+			}
+			else if ( monto < 0 )
+			{
+				texto = texto + '<li>Debe ingresar un monto mayor a cero</li>';
+				bandera = 'Y';
+			}	
+			if (fecha == '')
+			{
+				texto = texto + '<li>Debe ingresar un fecha</li>';
+				bandera = 'Y';
+			}
+			else
+			{					
+				
+				if(!fecha.match(/^[0-9]{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])/))					 
+				{						
+					texto = texto + '<li>Debe ingresar un fecha valida</li>';
+					bandera = 'Y';
+				}
+			}
+			if (obs == '')
+			{
+				texto = texto + '<li>Debe ingresar una observacion</li>';
+				bandera = 'Y';
+			}
+			
+			var texto = texto + '</ul>' ;			
+			
+			if ( bandera == 'Y' )
+			{		
+				if ( mod == 'I' )
+				{
+					$("#resultadoIngreso").html('<div id="mensajeResult" class="alert alert-danger">' + texto + '</div>');	
+				}else{
+					$("#resultadoEgreso").html('<div id="mensajeResult" class="alert alert-danger">' + texto + '</div>');
+				}
+				
+			}
+			else
+			{			
+				$("#resultadoIngreso").html('');
+				$("#resultadoEgreso").html('');
+				Dajaxice.caja.registroMvt(mostrarResultado, {'monto': monto,
+															 'fecha': fecha,
+															 'observacion': obs,
+															 'modulo': mod});		
+			}
+						
 		}
 		
 		function mostrarResultado(data)
-		{
+		{		
+			
+			var inicial = ""
+			
 			if (data.mod == 'I')
 			{
+				document.getElementById('txtmontoIngreso').value = '';
+				document.getElementById('txtFechaIngreso').value = '';
+				document.getElementById('txtAreaIngreso').value = '';
+				
 				var div = document.getElementById('listIngresos');
+				inicial = "<div id='resultadoIngreso'></div>";
+				inicial += "<div class='panel panel-primary'> <div class='panel-heading'> &Uacute;ltimos Ingresos </div> <div class='panel-body'>"
+				inicial += "<a  href='{% url caja.views.listarDetalle 'I' %}' > <span class='glyphicon glyphicon-list-alt'></span> Ver todos los ingresos... </a>";
+				inicial += "<table class='table table-hover' id='tableIng'> <thead> <tr> <td>Fecha</td> "; 
+				inicial += "<td align='center'>Valor</td>  </tr> </thead> ";
 			}
 			else
 			{
+				document.getElementById('txtmontoEgreso').value = '';
+				document.getElementById('txtFechaEgreso').value = '';
+				document.getElementById('txtAreaEgreso').value = '';	
+				
 				var div = document.getElementById('listEgresos');
+				inicial = "<div id='resultadoEgreso'></div>"
+				inicial += "<div class='panel panel-primary'> <div class='panel-heading'> &Uacute;ltimos Egresos </div> <div class='panel-body'>"
+				inicial += "<a  href='{% url caja.views.listarDetalle 'E' %}' > <span class='glyphicon glyphicon-list-alt'></span> Ver todos los egresos... </a>";
+				inicial += "<table class='table table-hover' id='tableIng'> <thead> <tr> <td>Fecha</td> "; 
+				inicial += "<td align='center'>Valor</td>  </tr> </thead> ";				
 			}
 			
-			var htmlFinal = "";
-			
-			var inicial = "<div class='panel panel-primary'> <div class='panel-heading'> &Uacute;ltimos Ingresos </div> <div class='panel-body'>"
-			
-			inicial += "<table class='table table-hover' id='tableIng'> <thead> <tr> <td>Fecha</td> "; 
-			inicial += "<td align='center'>Valor</td>  </tr> </thead> ";
-	  		
+			var htmlFinal = "";			
 			htmlFinal += "<tbody>";
 			
 	  		var mvts = data.datos;
@@ -291,9 +374,7 @@
 			document.getElementById("spanFecha").innerHTML = data.fechaIni;
 		}
 		
-		
-		
-        
+
         
 
 	</script>

@@ -1,9 +1,10 @@
 from cliente.models import cliente
+from decimal import Decimal
 from django.core import serializers
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from factVenta.models import cabeceraVenta
+from factVenta.models import cabeceraVenta, productoVenta
 from producto.models import producto
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
@@ -31,7 +32,7 @@ def index(request):
                                 formaPago = "N")          
     cabecera.save() 
     cabecera_id = cabecera.id;   
-    productos = producto.objects.all();        
+    productos = producto.objects.filter(isactive='Y');        
     return render_to_response('adminFacturaVenta.html', {"productos": productos, "cabecera":cabecera_id, "numFactura":consecutivo}, 
                               context_instance=RequestContext(request) )
     
@@ -43,6 +44,32 @@ def consecutivoFact():
         cadena += '0'
     cadena += str(registros)
     return cadena
+
+def moneyfmt(value, places=2, curr='', sep=',', dp='.', pos='', neg='-', trailneg=''):
+ 
+    q = Decimal(10) ** -places      # 2 places --> '0.01'
+    sign, digits, exp = value.quantize(q).as_tuple()
+    result = []
+    digits = list(map(str, digits))
+    build, next = result.append, digits.pop
+    if sign:
+        build(trailneg)
+    for i in range(places):
+        build(next() if digits else '0')
+    if places:
+        build(dp)
+    if not digits:
+        build('0')
+    i = 0
+    while digits:
+        build(next())
+        i += 1
+        if i == 3 and digits:
+            i = 0
+            build(sep)
+    build(curr)
+    build(neg if sign else pos)
+    return ''.join(reversed(result))
         
 
 def imprimirFact(request, cabecera):
@@ -118,20 +145,18 @@ def imprimirFact(request, cabecera):
     c.drawString(433, 137, 'ACEPTADO') 
     c.drawString(450, 70, 'NOMBRE Y C.C O N.I.T')  
     
-    
-    c.setFont("Helvetica", 9)
-    x = 50
+    c.setFont("Helvetica", 9)  
+      
     y = 625
-    for i in range(31):
-        c.drawString(x, y, 'esto' + str(i)) 
-        c.drawString(130, y, 'descripcion bien larga para ver como') 
-        c.drawString(320, y, '1000000' + str(i)) 
-        c.drawString(410, y, '1000000' + str(i)) 
-        c.drawString(490, y, '1000000' + str(i))        
-        y = y - 12
-        if str(i) == '44':
-            c.showPage() 
-            
+    for i in productoVenta.objects.filter(cabecera_id=cabecera):
+        c.drawRightString(90, y, moneyfmt(Decimal(i.cantidad), 0)) 
+        c.drawString(140, y, str(i.nombreProducto)) 
+        c.drawRightString(388, y, moneyfmt(Decimal(i.productoId.precioventa), 2, '$', ',')) 
+        c.drawRightString(473, y, moneyfmt(Decimal(i.descuento), 2, '$', ',') ) 
+        c.drawRightString(553, y,  moneyfmt(Decimal(i.valorTotal), 2, '$', ',') )        
+        y = y - 15        
+     
+          
     texto = """Nota: 1. La presente factura de venta se asimila
             en todos sus efectos a la letra de cambio. 2. En
             caso de mora se causara el interes autorizado

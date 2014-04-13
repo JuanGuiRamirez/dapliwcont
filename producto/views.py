@@ -22,7 +22,7 @@ def index(request):
                     Q(nombre__icontains=query))
             lista_productos = producto.objects.filter(qset).distinct()
         else:
-            lista_productos = producto.objects.all()        
+            lista_productos = producto.objects.filter(isactive='Y')        
         return render_to_response('adminProducto.html', {'productos':lista_productos,}, context_instance=RequestContext(request))
     
 
@@ -71,7 +71,10 @@ def editarProducto(request, producto_id):
 def delProducto(request, producto_id): 
     if request.is_ajax and request.method == "GET":        
         producto_eliminar = producto.objects.get(pk=producto_id)
-        producto_eliminar.delete()
+        producto_eliminar.isactive = 'N'
+        producto_eliminar.updated = datetime.datetime.now()
+        producto_eliminar.updatedby = str(request.user.id)
+        producto_eliminar.save()
         return HttpResponseRedirect('/index')
     else:
         return Http404

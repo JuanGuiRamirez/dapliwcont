@@ -31,6 +31,7 @@ urlpatterns = patterns('',
     
     url(r'^clis/$', 'caja.views.index'),
     url(r'^cing/$', 'caja.views.rIngreso'),
+    url(r'^cLisDet/(?P<mod>[^/]+)$', 'caja.views.listarDetalle'),
     
     url(r'^plis/$', 'proveedor.views.index'),
     url(r'^pA/$', 'proveedor.views.nitAjax'),
@@ -43,7 +44,7 @@ urlpatterns = patterns('',
     url(r'^lcc/$', 'cxc.views.index'), 
     url(r'^abcc/(?P<cxcId>\d+)$', 'cxc.views.addAbono'),  
     url(r'^lfcc/(?P<cxcId>\d+)$', 'cxc.views.verCxc'),
-    url(r'^detF/$', 'cxc.views.detalleFactura'),
+    url(r'^detF/(?P<facturaId>\d+)$', 'cxc.views.detalleFactura'),
     
     url(r'^detPDF/$', 'cxc.views.crearPDF'),    
  
