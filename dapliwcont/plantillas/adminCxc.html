@@ -2,23 +2,30 @@
 
 {% block estilo %}
 	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}css/dataTables.bootstrap.css">
 {% endblock estilo %}	
 
 {% block contenido %}
 	<section id="contenedor" >
-		<article id="filtroCuenta" class="col-md-10 col-md-offset-2">
-			<form action="." method="GET" class="row">
-				<div class="col-sm-4 col-xs-9">
-					<input type="text" class="form-control " name="q" value="{{ query|escape }}" placeholder="Ingrese un filtro para realizar la busqueda">
-				</div>
-				<div class="col-sm-6 col-xs-8">
-					<input type="submit" class="btn btn-info" value="Buscar">						
-				</div>
-			</form>	
-		</article>
+<!-- 		<article id="filtroCuenta" class="col-md-10 col-md-offset-2"> -->
+<!-- 			<form action="." method="GET" class="row"> -->
+<!-- 				<div class="col-sm-4 col-xs-9"> -->
+<!-- 					<input type="text" class="form-control " name="q" value="{{ query|escape }}" placeholder="Ingrese un filtro para realizar la busqueda"> -->
+<!-- 				</div> -->
+<!-- 				<div class="col-sm-6 col-xs-8"> -->
+<!-- 					<input type="submit" class="btn btn-info" value="Buscar">						 -->
+<!-- 				</div> -->
+<!-- 			</form>	 -->
+<!-- 		</article> -->
 
-		<article id="tablaCuentas" class="col-md-8 col-md-offset-2">				
-			<table class="table table-hover">
+		<article id="filtroCxc" class="col-md-8 col-md-offset-2">
+				<div class="col-md-6" id="lblTitulo">
+					<h2>Lista de cuentas por cobrar</h2>
+				</div>													
+		</article> 
+
+		<article id="tablaCuentas" class="col-md-8 col-md-offset-2">
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="tablaCxc" width="100%">			
 				<thead>
 					<tr>
 						<td>Cliente</td>									
@@ -34,12 +41,9 @@
 						<td>{{ cuenta.totalDeudaGeneral }}</td>
 						<td>{{ cuenta.totalAbonosGeneral }}</td>						
 						<td>
-							<a href="{% url cxc.views.addAbono cuenta.id %}" role="button" class="btn btn-success">
-								<span class="glyphicon glyphicon-euro"></span>
-							</a> 
-							<a role="button" class="btn btn-warning">
-								<span class="glyphicon glyphicon-new-window"></span> 
-							</a> 
+							<a href="{% url cxc.views.addAbono cuenta.id %}" role="button" class="btn btn-default">
+								<span class="glyphicon glyphicon-euro"></span> Abonar
+							</a>							 
 						</td>
 						
 					</tr>
@@ -72,3 +76,43 @@
 
 {% endblock contenido %}
 
+
+{% block script %}
+
+	<script type="text/javascript" language="javascript" src="{{STATIC_URL}}js/jquery.dataTables.js"></script>
+	<script type="text/javascript" language="javascript" src="{{STATIC_URL}}js/dataTables.bootstrap.js"></script>
+	
+	<script type="text/javascript">
+	
+		$(document).on('ready', inicio);
+		
+		function inicio()
+		{		
+			$('#tablaCxc').dataTable({
+		    	'oLanguage': {
+		    		"sSearch": "Buscar:",
+		    		"sProcessing": "Procesando...",
+		    		"sEmptyTable": "No hay cuentas por cobrar disponibles",
+		    		"sZeroRecords": "No se encontraron resultados",
+		    		"sLengthMenu": "Mostrar _MENU_ registros",
+		    		"sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+		    		"sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+		    		"sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+		    		"sInfoPostFix": "",
+		    		"sUrl": "",
+		    		"sLoadingRecords": "Cargando...",
+		    		"sInfoThousands": ",",
+		    		"oPaginate": {
+						"sFirst": "Primero",
+						"sLast": "Ultimo",
+						"sNext": "Siguiente",
+						"sPrevious": "Anterior"
+					},
+					"fnInfoCallback": null,
+				}
+		    });			
+		}
+		
+	</script>
+	
+{% endblock script %}

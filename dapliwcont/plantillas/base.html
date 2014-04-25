@@ -15,11 +15,11 @@
 	<body>
 		<header class="row">
 			<div class="logo col-sm-2 col-xs-4 text-center">
-				<img src="{{STATIC_URL}}img/logotipo.png">
+				<img src="{{STATIC_URL}}img/logo.png">
 			</div>
 			
 			<div class="titulo col-sm-5 col-xs-8">
-				<h1>Dapliw2014</h1>
+				<h1>Dapliw 2014</h1>
 			</div>
 		</header>
 		
@@ -33,7 +33,7 @@
 		        <span class="icon-bar"></span>
 		        <span class="icon-bar"></span>
 		      </button>
-		      <a class="navbar-brand" href="#">DAPLIW</a>
+		      <a class="navbar-brand" href="{% url producto.views.index %}">DAPLIW</a>
 		    </div>
 		
 		    <!-- Collect the nav links, forms, and other content for toggling -->
@@ -44,7 +44,7 @@
 		        <li><a href="/factV/">Factura Venta</a></li>
 		        <li><a href="/clis/">Caja</a></li>
 		        <li><a href="/lcc/">Creditos</a></li>
-		        <li><a href="/plis/">Factura Compra</a></li>
+<!-- 		        <li><a href="/plis/">Factura Compra</a></li> -->
 		        <li class="dropdown">
 		          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reportes <b class="caret"></b></a>
 		          <ul class="dropdown-menu">
