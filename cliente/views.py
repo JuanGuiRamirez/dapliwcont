@@ -17,7 +17,7 @@ def index(request):
         Q(nombre__icontains=query))
         lista_clientes = cliente.objects.filter(qset).distinct()
     else:
-        lista_clientes =  cliente.objects.filter(isactive='Y')       
+        lista_clientes =  cliente.objects.filter(isactive='Y').exclude(pk=1)
     return render_to_response('adminCliente.html', {'clientes':lista_clientes}, context_instance=RequestContext(request))
 
 
