@@ -50,9 +50,9 @@ def validarProductos(request, codigoPrd, modulo, cantidad, cabeceraId):
                 cantidadValidar = 1
         else:
             prdVenta = productoVenta.objects.filter(pk=codigoPrd) 
-            productoajax = producto.objects.filter(pk=prdVenta[0].productoId_id)[:1]
-            cantidadValidar = cantidad            
-        if productoajax[0].cantidad <= cantidadValidar:
+            productoajax = producto.objects.filter(pk=prdVenta[0].productoId_id)[:1]            
+            cantidadValidar = float(cantidad)            
+        if productoajax[0].cantidad < cantidadValidar:
             error = '1'
         else:
             error = '0'
