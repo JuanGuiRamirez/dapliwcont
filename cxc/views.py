@@ -68,13 +68,20 @@ def verCxc(request, cxcId):
 def detalleFactura(request, facturaId):
     prod =  productoVenta.objects.filter(cabecera_id = facturaId)
     fact = cuentaCobrar.objects.filter(facturaId_id = facturaId) 
+    forma = ''
+    if fact[0].facturaId.formaPago == 'F':
+        forma = 'Credito'
+    else:
+        forma = 'Contado'  
+    
     return render_to_response('detalleFactura.html', {'productos':prod, 'cliente': fact[0].facturaId.clienteId,
                                                       'fecha': fact[0].facturaId.fechaFactura,
                                                       'numFact': fact[0].facturaId.numeroFactura,
                                                       'valNeto': fact[0].facturaId.totalNeto,
                                                       'valDesc': fact[0].facturaId.totalDescuento,
                                                       'valTotal': fact[0].facturaId.totalPagar,
-                                                      'cabecera':facturaId,},
+                                                      'cabecera':facturaId,
+                                                      'forma_pago' : forma},
                                                     context_instance=RequestContext(request))
 
 
