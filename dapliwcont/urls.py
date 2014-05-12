@@ -39,7 +39,9 @@ urlpatterns = patterns('',
     url(r'^pAjax/$', busquedaPro.as_view()),
     
     url(r'^factV/$', 'factVenta.views.index'), 
-    url(r'^factImp/(?P<cabecera>[^/]+)$', 'factVenta.views.imprimirFact'), 
+    url(r'^factImp/(?P<cabecera>[^/]+)$', 'factVenta.views.imprimirFact'),
+    
+    url(r'^factC/$', 'factCompra.views.index'),  
     
     url(r'^lcc/$', 'cxc.views.index'), 
     url(r'^abcc/(?P<cxcId>\d+)$', 'cxc.views.addAbono'),  

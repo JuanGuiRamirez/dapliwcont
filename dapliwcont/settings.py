@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     'cliente',
     'proveedor',
     'factVenta',
+    'factCompra',
     'caja',
     'cxc',
     'principal',
