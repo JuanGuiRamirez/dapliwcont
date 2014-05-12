@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block inicioDajax %}
+	{% load dajaxice_templatetags %}
+{% endblock inicioDajax %}
+
+{% block importJsDajax %}
+	{% dajaxice_js_import %}
+	<script type="text/javascript" src="/static/dajax/jquery.dajax.core.js" ></script>
+{% endblock importJsDajax %}
+
+{% block estilo %}
+	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+	<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}css/jquery-ui-1.10.3.custom.min.css">
+{% endblock estilo %}
+
+
+{% block contenido %}
+	<section id="contenedor" class="col-sm-12 ">
+		<article  class="col-sm-3">
+			
+			
+			<div class="panel panel-default">
+			  <div class="panel-heading">Informaci&oacute;n Proveedor</div>
+			  <div class="panel-body">
+			    <form method="post" id="formCliente"> {% csrf_token %}
+					<div class="input-group ">
+						<input type="text" id="txtNitProveedor" name="txtNitProveedor" value="{{ query|escape }}" class="form-control " placeholder="Nit cliente">
+						<span class="input-group-btn">
+					    	<button class="btn btn-default " type="button" id="btnBuscar" onclick="getProveedor();">
+					    	  		<span class="glyphicon glyphicon-search"></span> 
+					    	</button>
+				    	</span>
+					</div>
+					<input type="text" class="form-control " id="txtNombreProveedor" readonly placeholder="Proveedor"/>	
+					<input type="text" class="form-control " id="txtFechaFactura"  placeholder="Fecha Factura"/>	
+					<input type="text" class="form-control " id="txtNumeroFactura"  placeholder="Numero Factura"/>
+						
+				</form>
+			  </div>
+			</div>
+			
+			<div class="panel panel-default">
+			  <div class="panel-heading">Informaci&oacute;n Compra</div>
+			  <div class="panel-body">
+			    <ul class="list-group">
+				  <li class="list-group-item">
+				    <span class="badge" id="spanNeto">0</span>
+				    Valor Neto
+				  </li>
+				  <li class="list-group-item">
+				    <span class="badge" id="spanDescuento">0</span>
+				    Valor Descuento
+				  </li>
+				  <li class="list-group-item">
+				    <span class="badge" id="spanTotal">0</span>
+				    Valor Total
+				  </li>
+				  <li class="list-group-item">
+					<label class="checkbox">
+			            <input type="checkbox" value="option1" id="formaPagoCheck"> Compra a cr&eacute;dito?
+			        </label>
+				  </li>
+				  <li class="list-group-item">
+					<p align="center">
+					  <button type="button" class="btn btn-primary" onclick="validarFactura();">Guardar</button>
+					  <button type="button" class="btn btn-default ">Cancelar</button>
+					</p>
+				  </li>
+				</ul>
+				
+			  </div>
+			</div>
+			
+		</article>
+		
+		<article class="col-sm-8 ">
+			<article class="panel panel-default">
+				<div class="panel-body">				
+				   <div id="resultado">							
+				   </div>
+				   <div class="row">			   		
+				   		<div class="col-sm-4">			   			
+				   			<div class="input-group ">
+				   				<span class="input-group-btn">
+							    	<button class="btn btn-default" type="button" id="btnCatalogo" onclick="cargarModal();">
+							    	  		<span class="glyphicon glyphicon-list-alt"></span> 
+							    	</button>
+						    	</span>
+								<input type="text" id="txtNitProducto" name="txtNitProducto" value="{{ query|escape }}" class="form-control" placeholder="Codigo">								
+								<span class="input-group-btn">
+							    	<button class="btn btn-default" type="button" id="btnBuscar" onclick="getProducto();">
+							    	  		<span class="glyphicon glyphicon-search"></span> 
+							    	</button>
+						    	</span>
+							</div>
+				   		</div>
+				   		<div class="col-sm-5">			   			
+							<input type="text" id="txtNombrePrd" readonly class="form-control" placeholder="Nombre">	
+							<input type="hidden" id="txtProductoCargado" readonly value="0" />					
+						</div>	
+						<div class="col-sm-3">			   			
+							<input type="text" id="txtCantidadPrd" class="form-control" placeholder="Cantidad">						
+						</div>								   
+				   </div>
+				   <div class="row">
+				   		<div class="col-sm-3">			   			
+							<input type="text" id="txtCantidadPrd" class="form-control" placeholder="Precio Compra">						
+						</div>
+						<div class="col-sm-3">			   			
+							<input type="text" id="txtCantidadPrd" class="form-control" placeholder="Precio Venta">						
+						</div>
+						<div class="col-sm-3">			   			
+							<input type="text" id="txtDescuentoPrd" class="form-control" placeholder="Descuento">						
+						</div>
+						<div class="col-sm-3 text-right">			   			
+							<button type="button" class="btn btn-primary" onclick="adicionarValProducto();">Adicionar</button>
+							<button type="button" class="btn btn-default" onclick="adicionarValProducto();">Cancelar</button>						
+						</div>
+				   </div>				
+				</div>
+			</article>						   			
+		</article>
+		
+
+		
+		
+		
+	</section>
+{% endblock contenido %}
+
+
+{% block script %}
+	<script type="text/javascript">
+	
+		$(document).on('ready', inicio);
+		var cabeceraGeneral;
+	
+		
+		function inicio()
+		{		
+			var fecha = $("#txtFechaFactura");
+			fecha.datepicker({dateFormat: 'yy-mm-dd'});
+			cabeceraGeneral = {{ cabecera }};
+		}
+		
+		function getProveedor()
+		{
+			nit = document.getElementById('txtNitProveedor').value;
+			if ( nit != '' )
+			{				
+				Dajaxice.factCompra.cargarProv(Dajax.process,{'nitProv': nit,
+															  'cabecera': cabeceraGeneral});	
+			}			
+		}
+		
+		function getProducto()
+		{
+			codigo = document.getElementById('txtNitProducto').value;
+			if ( nit != '' )
+			{				
+				Dajaxice.factCompra.cargarProducto(Dajax.process,{'nitProducto': codigo, });	
+			}			
+		}
+		
+	</script>
+	
+	<script type="text/javascript" src="{{STATIC_URL}}js/jqueryui.js"></script>	
+{% endblock script %}
+
+
+

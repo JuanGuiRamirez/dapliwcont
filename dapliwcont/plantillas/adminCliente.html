@@ -18,36 +18,38 @@
 				</div>										
 		</article> 
 		
-		<article id="tablaClientes" class="col-md-8 col-md-offset-2">						
-			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="tablaCli" width="100%">
-				<thead>
-					<tr>
-						<td>Identificacion</td>									
-						<td>Nombre Completo</td>
-						<td>Saldo Favor</td>
-						<td>Saldo Deuda</td>
-						<td></td>
-					</tr>
-				</thead>
-				<tbody>
-					{% for cliente in clientes %}
-					<tr>
-						<td>{{ cliente.identificacion }}</td>
-						<td>{{ cliente.nombre }}</td>
-						<td>{{ cliente.saldofavor }}</td>
-						<td>{{ cliente.saldodeuda }}</td>
-						<td>
-							<a href="{% url cliente.views.editarCliente cliente.id %}" role="button" class="btn btn-default">
-								<span class="glyphicon glyphicon-edit"></span>
-							</a> 
-							<a data-toggle="modal" onclick="cargarModal(this.id);" class="btn btn-danger" id="{{ cliente.id }}">
-								<span class="glyphicon glyphicon-trash"></span> 
-							</a> 
-						</td>	
-					</tr>					
-					{% endfor %}
-				</tbody>
-			</table>
+		<article id="tablaClientes" class="col-md-8 col-md-offset-2">
+			<article  class="table-responsive">						
+				<table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="tablaCli" width="100%">
+					<thead>
+						<tr>
+							<td>Identificacion</td>									
+							<td>Nombre Completo</td>
+							<td>Saldo Favor</td>
+							<td>Saldo Deuda</td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+						{% for cliente in clientes %}
+						<tr>
+							<td>{{ cliente.identificacion }}</td>
+							<td>{{ cliente.nombre }}</td>
+							<td>{{ cliente.saldofavor }}</td>
+							<td>{{ cliente.saldodeuda }}</td>
+							<td>
+								<a href="{% url cliente.views.editarCliente cliente.id %}" role="button" class="btn btn-default">
+									<span class="glyphicon glyphicon-edit"></span>
+								</a> 
+								<a data-toggle="modal" onclick="cargarModal(this.id);" class="btn btn-danger" id="{{ cliente.id }}">
+									<span class="glyphicon glyphicon-trash"></span> 
+								</a> 
+							</td>	
+						</tr>					
+						{% endfor %}
+					</tbody>
+				</table>
+			</article>
 		</article>
 
 		<article class="modal fade" id="myModal">
