@@ -1,0 +1,12 @@
+
+--> Se debe de tener un proveedor generico con id = 1
+
+
+--> forma de pago :
+			F = credito
+			C = contado
+			N = no facturadas
+
+--> estado :
+			F = Facturada
+			C = construccion
