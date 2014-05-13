@@ -29,11 +29,12 @@ class productoCompra( models.Model ):
     updated = models.DateTimeField()
     updatedby = models.CharField(max_length=100)    
 
-    productoId = models.ForeignKey(producto)
-    nombreProducto = models.CharField(max_length=120)    
+    productoId = models.ForeignKey(producto)      
     cantidad = models.FloatField()
     descuento = models.FloatField()
     valorTotal = models.FloatField()
+    precioCompra = models.FloatField()
+    precioVenta = models.FloatField()
     cabecera = models.ForeignKey(cabeceraCompra)
     
     def __str__(self):
