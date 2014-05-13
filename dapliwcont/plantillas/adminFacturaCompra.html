@@ -63,7 +63,7 @@
 				  </li>
 				  <li class="list-group-item">
 					<p align="center">
-					  <button type="button" class="btn btn-primary" onclick="validarFactura();">Guardar</button>
+					  <button type="button" class="btn btn-primary" onclick="addProducto();">Guardar</button>
 					  <button type="button" class="btn btn-default ">Cancelar</button>
 					</p>
 				  </li>
@@ -105,22 +105,27 @@
 				   </div>
 				   <div class="row">
 				   		<div class="col-sm-3">			   			
-							<input type="text" id="txtCantidadPrd" class="form-control" placeholder="Precio Compra">						
+							<input type="text" id="txtPrecioC" class="form-control" placeholder="Precio Compra">						
 						</div>
 						<div class="col-sm-3">			   			
-							<input type="text" id="txtCantidadPrd" class="form-control" placeholder="Precio Venta">						
+							<input type="text" id="txtPrecioV" class="form-control" placeholder="Precio Venta">						
 						</div>
 						<div class="col-sm-3">			   			
 							<input type="text" id="txtDescuentoPrd" class="form-control" placeholder="Descuento">						
 						</div>
 						<div class="col-sm-3 text-right">			   			
-							<button type="button" class="btn btn-primary" onclick="adicionarValProducto();">Adicionar</button>
-							<button type="button" class="btn btn-default" onclick="adicionarValProducto();">Cancelar</button>						
+							<button type="button" class="btn btn-primary" onclick="addProducto();">Adicionar</button>
+							<button type="button" class="btn btn-default" onclick="addProducto();">Cancelar</button>						
 						</div>
 				   </div>				
 				</div>
 			</article>						   			
 		</article>
+		
+		<article id="listPrductoCompra" class="col-sm-8">
+			
+		</article>
+		
 		
 
 		
@@ -155,12 +160,54 @@
 		}
 		
 		function getProducto()
-		{
-			codigo = document.getElementById('txtNitProducto').value;
-			if ( nit != '' )
+		{			
+			codigo = document.getElementById('txtNitProducto').value;			
+			if ( codigo != '' )
 			{				
 				Dajaxice.factCompra.cargarProducto(Dajax.process,{'nitProducto': codigo, });	
 			}			
+		}
+		
+		function addProducto()
+		{
+			Dajaxice.factCompra.addProductoCompra(listarProductos,{'cabecera': cabeceraGeneral,
+					 											  'producto': document.getElementById('txtProductoCargado').value,
+					 											  'cantidad': document.getElementById('txtCantidadPrd').value,
+					 											  'pre_compra': document.getElementById('txtPrecioC').value,
+					 											  'pre_venta': document.getElementById('txtPrecioV').value,
+					 											  'descuento': document.getElementById('txtDescuentoPrd').value,});
+		}
+		
+		function listarProductos(data)
+		{				
+			var div = document.getElementById('listPrductoCompra');
+			var htmlFinal = "";
+			
+			var inicial = "<table class='table table-striped table-bordered' id='tableProductos'> <thead> <tr> <td>Producto</td> "; 
+			inicial += "<td>Cantidad</td>  <td>Descuento</td> <td>Valor Total</td>  <td></td>  </tr> </thead> ";
+	  		
+			htmlFinal += "<tbody>";
+			
+	  		var productos = data.datos;
+	  		
+			for(var i=0; i<productos.length; ++i){
+				htmlFinal += "<tr>";
+	 			htmlFinal += "<td>" + productos[i].producto + "</td>";
+	 			htmlFinal += "<td>" + productos[i].cantidad + "</td>";
+	 			htmlFinal += "<td>" + productos[i].descuento + "</td>";
+	 			htmlFinal += "<td>" + productos[i].total + "</td>";
+	 			htmlFinal += "<td> <a onclick='cargarModalEliminar(this.id);' role='button' id='" + productos[i].id + "' class='btn btn-danger'> <span class='glyphicon glyphicon-trash'></span> </a> ";
+	 			htmlFinal += "<a onclick='cargarPrdEdit(this.id);' role='button' id='" + productos[i].id + "'  class='btn btn-default'> <span class='glyphicon glyphicon-edit'></span> </a> </td>";
+	 			htmlFinal += "</tr>";
+			}
+			
+			
+			
+			htmlFinal += "</tbody> </table>";
+	 		inicial += htmlFinal; 
+			div.innerHTML = "";
+			div.innerHTML = inicial;		
+
 		}
 		
 	</script>
