@@ -1,5 +1,6 @@
 from cliente.models import cliente
 from decimal import Decimal
+from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http import HttpResponse, Http404
 from django.shortcuts import render_to_response
@@ -13,7 +14,7 @@ import json as json
 
 
 
-
+@login_required(login_url='/')
 def index(request):    
     consecutivo = consecutivoFact()  
     #creo una cabecera para la factura    
@@ -71,7 +72,7 @@ def moneyfmt(value, places=2, curr='', sep=',', dp='.', pos='', neg='-', trailne
     build(neg if sign else pos)
     return ''.join(reversed(result))
         
-
+@login_required(login_url='/')
 def imprimirFact(request, cabecera):
     
     factura = cabeceraVenta.objects.get(pk=cabecera)
