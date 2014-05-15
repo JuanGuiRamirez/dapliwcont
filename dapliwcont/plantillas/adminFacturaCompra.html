@@ -206,8 +206,29 @@
 			htmlFinal += "</tbody> </table>";
 	 		inicial += htmlFinal; 
 			div.innerHTML = "";
-			div.innerHTML = inicial;		
+			div.innerHTML = inicial;
+			
+			document.getElementById("spanDescuento").innerHTML = data.desc;
+			document.getElementById("spanNeto").innerHTML = data.total;
+			document.getElementById("spanTotal").innerHTML = data.totalPagar ;			
+			
+			clearProducto()
 
+		}
+		
+		function cargarPrdEdit(prdEdit)
+		{
+			Dajaxice.factCompra.cargarEdit(Dajax.process,{'numPrd': prdEdit});	
+		}
+		
+		function clearProducto()
+		{
+			document.getElementById('txtNombrePrd').value = '';
+			document.getElementById('txtProductoCargado').value = '';
+			document.getElementById('txtCantidadPrd').value = '';
+			document.getElementById('txtPrecioC').value = '';
+			document.getElementById('txtPrecioV').value = '';
+			document.getElementById('txtDescuentoPrd').value = '';
 		}
 		
 	</script>
