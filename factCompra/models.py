@@ -33,6 +33,7 @@ class productoCompra( models.Model ):
     cantidad = models.FloatField()
     descuento = models.FloatField()
     valorTotal = models.FloatField()
+    valorNeto = models.FloatField()
     precioCompra = models.FloatField()
     precioVenta = models.FloatField()
     cabecera = models.ForeignKey(cabeceraCompra)
