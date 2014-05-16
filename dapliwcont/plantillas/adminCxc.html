@@ -2,6 +2,7 @@
 
 {% block estilo %}
 	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}css/responsiveJTable.css">
 	<link rel="stylesheet" href="{{STATIC_URL}}css/dataTables.bootstrap.css">
 {% endblock estilo %}	
 
@@ -25,33 +26,33 @@
 		</article> 
 
 		<article id="tablaCuentas" class="col-md-8 col-md-offset-2">
-			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="tablaCxc" width="100%">			
-				<thead>
-					<tr>
-						<td>Cliente</td>									
-						<td>Total Deuda</td>
-						<td>Total Abonos</td>						
-						<td></td>
-					</tr>
-				</thead>
-				<tbody>
-					{% for cuenta in cuentas %}
-					<tr>
-						<td>{{ cuenta.clienteId }}</td>
-						<td>{{ cuenta.totalDeudaGeneral }}</td>
-						<td>{{ cuenta.totalAbonosGeneral }}</td>						
-						<td>
-							<a href="{% url cxc.views.addAbono cuenta.id %}" role="button" class="btn btn-default">
-								<span class="glyphicon glyphicon-euro"></span> Abonar
-							</a>							 
-						</td>
-						
-					</tr>
-					{% empty %}
-						<td colspan="6">No hay Cuentas</td>
-					{% endfor %}
-				</tbody>
-			</table>
+			<article id="tablaResponsive"  class="table-responsive">
+				<table cellpadding="0" cellspacing="0" border="0" class="table table-striped" id="tablaCxc" width="100%">			
+					<thead>
+						<tr>
+							<td>Cliente</td>									
+							<td>Total Deuda</td>
+							<td>Total Abonos</td>						
+							<td></td>
+						</tr>
+					</thead>
+					<tbody>
+						{% for cuenta in cuentas %}
+						<tr>
+							<td>{{ cuenta.clienteId }}</td>
+							<td>{{ cuenta.totalDeudaGeneral }}</td>
+							<td>{{ cuenta.totalAbonosGeneral }}</td>						
+							<td>
+								<a href="{% url cxc.views.addAbono cuenta.id %}" role="button" class="btn btn-default">
+									<span class="glyphicon glyphicon-euro"></span> Abonar
+								</a>							 
+							</td>
+							
+						</tr>					
+						{% endfor %}
+					</tbody>
+				</table>
+			</article>
 		</article>
 
 		<article class="modal fade" id="myModal">

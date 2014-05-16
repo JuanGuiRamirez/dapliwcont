@@ -2,6 +2,7 @@
 
 {% block estilo %}
 	<link rel="stylesheet" href="{{STATIC_URL}}css/estiloAdmin.css">
+	<link rel="stylesheet" href="{{STATIC_URL}}css/responsiveJTable.css">
 	<link rel="stylesheet" href="{{STATIC_URL}}css/dataTables.bootstrap.css">
 {% endblock estilo %}
 
@@ -21,30 +22,32 @@
 				</div>										
 		</article> 
 	
-		<article id="tablaGeneral" class="col-md-8 col-md-offset-2">						
-			<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="tablaMvtCaja" width="100%">
-				<thead>
-					<tr>
-						<td width="28%">Fecha</td>									
-						<td width="20%" >Valor</td>
-						<td width="52%">Descripcion</td>						
-					</tr>
-				</thead>
-				<tbody>
-					{% for i in mvts %}
-					<tr>
-						{% if mod == 'I' %}
-							<td>{{ i.fechaIngreso }}</td>
-							<td>{{ i.totalIngreso }}</td>
-						{% else %}
-							<td>{{ i.fechaEgreso }}</td>
-							<td>{{ i.totalEgreso }}</td>
-						{% endif %}						
-						<td>{{ i.descripcion }}</td>							
-					</tr>					
-					{% endfor %}
-				</tbody>
-			</table>
+		<article id="tablaGeneral" class="col-md-8 col-md-offset-2">	
+			<article id="tablaResponsive"  class="table-responsive">					
+				<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="tablaMvtCaja" width="100%">
+					<thead>
+						<tr>
+							<td width="28%">Fecha</td>									
+							<td width="20%" >Valor</td>
+							<td width="52%">Descripcion</td>						
+						</tr>
+					</thead>
+					<tbody>
+						{% for i in mvts %}
+						<tr>
+							{% if mod == 'I' %}
+								<td>{{ i.fechaIngreso }}</td>
+								<td>{{ i.totalIngreso }}</td>
+							{% else %}
+								<td>{{ i.fechaEgreso }}</td>
+								<td>{{ i.totalEgreso }}</td>
+							{% endif %}						
+							<td>{{ i.descripcion }}</td>							
+						</tr>					
+						{% endfor %}
+					</tbody>
+				</table>
+			</article>
 		</article>
 	</section>
 

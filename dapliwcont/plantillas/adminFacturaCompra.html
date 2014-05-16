@@ -126,7 +126,24 @@
 			
 		</article>
 		
-		
+		<!-- modal para eliminar productocompra -->
+		<article class="modal fade" id="modalEliminar" >
+			<div class="modal-dialog ">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Eliminar Producto</h4>
+					</div>
+					<div class="modal-body">
+						<p>Esta seguro que desea eliminar este producto de la factura?</p>	
+					</div>
+					<div class="modal-footer">						
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+						<a class="btn btn-danger" id="btnDel" onclick="eliminarPrdCompra();" data-toggle="modal">Eliminar</a>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</article><!-- /.modal -->	
 
 		
 		
@@ -180,10 +197,13 @@
 		
 		function listarProductos(data)
 		{				
+			$('#modalEliminar').modal('hide');
+			
 			var div = document.getElementById('listPrductoCompra');
 			var htmlFinal = "";
 			
-			var inicial = "<table class='table table-striped table-bordered' id='tableProductos'> <thead> <tr> <td>Producto</td> "; 
+			var inicial = "<article id='tablaResponsive'  class='table-responsive'>"
+			inicial += "<table class='table table-striped table-bordered' id='tableProductos'> <thead> <tr> <td>Producto</td> "; 
 			inicial += "<td>Cantidad</td>  <td>Descuento</td> <td>Valor Total</td>  <td></td>  </tr> </thead> ";
 	  		
 			htmlFinal += "<tbody>";
@@ -201,10 +221,16 @@
 	 			htmlFinal += "</tr>";
 			}
 			
+			if ( i == 0 )
+			{
+				inicial = "";
+			}
+			else
+			{
+				htmlFinal += "</tbody> </table> </article>";
+		 		inicial += htmlFinal; 
+			}
 			
-			
-			htmlFinal += "</tbody> </table>";
-	 		inicial += htmlFinal; 
 			div.innerHTML = "";
 			div.innerHTML = inicial;
 			
@@ -229,6 +255,18 @@
 			document.getElementById('txtPrecioC').value = '';
 			document.getElementById('txtPrecioV').value = '';
 			document.getElementById('txtDescuentoPrd').value = '';
+		}
+		
+		function cargarModalEliminar(prd_id)
+		{					
+			id_prod = prd_id;
+			$('#modalEliminar').modal('show');				
+		}
+		
+		function eliminarPrdCompra()
+		{		
+			Dajaxice.factCompra.eliminarPrd(listarProductos,{'numPrd': id_prod,
+															'cabeceraId': cabeceraGeneral});	
 		}
 		
 	</script>

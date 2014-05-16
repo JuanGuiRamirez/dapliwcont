@@ -69,36 +69,40 @@
 								Cajas cerradas recientemente
 							</div>
 							<div class="panel-body">
-								<table class="table table-hover">
-									<thead>
-										<tr>
-											<td>Fecha Inicial</td>									
-											<td>Fecha Final</td>
-											<td align="center">Ingresos</td>
-											<td align="center">Egresos</td>
-											<td align="center">Saldo</td>									
-										</tr>
-									</thead>
-									<tbody>
-										{% for caja in cajas %}
-										<tr>
-											<td>{{ caja.fechaInicio|date:"Y-m-d" }}</td>
-											<td>{{ caja.fechaCierre|date:"Y/m/d" }}</td>	
-											<td align="right">{{ caja.totalIngresos }}</td>
-											<td align="right">{{ caja.totalEgresos }}</td>	
-											<td align="right">{{ caja.saldoCaja }}</td>																			
-										</tr>
-										{% empty %}
-											<td colspan="6">No hay Cajas</td>
-										{% endfor %}
-									</tbody>
-								</table>
+								<article  class="table-responsive">
+									<table class="table table-hover">
+										<thead>
+											<tr>
+												<td>Fecha Inicial</td>									
+												<td>Fecha Final</td>
+												<td align="center">Ingresos</td>
+												<td align="center">Egresos</td>
+												<td align="center">Saldo</td>									
+											</tr>
+										</thead>
+										<tbody>
+											{% for caja in cajas %}
+											<tr>
+												<td>{{ caja.fechaInicio|date:"Y-m-d" }}</td>
+												<td>{{ caja.fechaCierre|date:"Y/m/d" }}</td>	
+												<td align="right">{{ caja.totalIngresos }}</td>
+												<td align="right">{{ caja.totalEgresos }}</td>	
+												<td align="right">{{ caja.saldoCaja }}</td>																			
+											</tr>
+											{% empty %}
+												<td colspan="6">No hay Cajas</td>
+											{% endfor %}
+										</tbody>
+									</table>
+								</article>
 							</div>
 						</div>
 		            </article>
 		        </div>
 		        <div class='tab-pane fade' id='ingreso'>
-		        	<article id="formIngreso" class="col-sm-4 col-sm-offset-1">			        		         
+		        	<article id="formIngreso" class="col-sm-4 col-sm-offset-1">	
+		        		<div id="resultadoIngreso">							
+			   			</div>		        		         
 						<form method="post" id="formIngreso"> {% csrf_token %}
 							<div class="form-group">
 							    <label for="txtmontoIngreso">Monto Ingreso: </label>
@@ -116,16 +120,9 @@
 							<input type="button" value="Enviar" class="btn btn-primary" onclick="enviarMvt('I');">							
 							<input type="button" value="Volver" class="btn btn-default">
 							
-								
-							
-							
-							
-							
 						</form>	
 					</article>
-					<article id="listIngresos" class="col-sm-6">
-						<div id="resultadoIngreso">							
-			   			</div>
+					<article id="listIngresos" class="col-sm-6">						
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								&Uacute;ltimos Ingresos
@@ -159,6 +156,8 @@
 		        </div>
 		        <div class='tab-pane fade' id='egreso'>
 		            <article id="formEgreso" class="col-sm-4 col-sm-offset-1">
+		            	<div id="resultadoEgreso">							
+			   			</div>
 						<form method="post"> {% csrf_token %}
 							<div class="form-group">
 							    <label for="txtmontoEgreso">Monto Egreso: </label>
@@ -177,9 +176,7 @@
 							<input type="button" value="Volver" class="btn btn-default">
 						</form>	
 					</article>
-					<article id="listEgresos" class="col-sm-6">
-						<div id="resultadoEgreso">							
-			   			</div>
+					<article id="listEgresos" class="col-sm-6">						
 						<div class="panel panel-primary">
 							<div class="panel-heading">
 								&Uacute;ltimos Egresos
