@@ -56,9 +56,13 @@ table thead td
 	padding-left: 8px;
 }
 
-
-
 #tablaProductos, #tablaClientes, #tablaGeneral, #tablaCuentas, #tablaListCuentas
 {
 	padding: 1em;
 }
+
+#tablaResponsive
+{
+	padding: 1em;
+}
+
