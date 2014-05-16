@@ -91,6 +91,13 @@ def calcularTotales (cabeceraId):
     cabecera.save()   
     
 
+@dajaxice_register
+def eliminarPrd (request, numPrd, cabeceraId):
+    prdEliminar = productoCompra.objects.filter(pk=numPrd)
+    prdEliminar.delete()
+    return listaProductos(cabeceraId)
+    
+
 def listaProductos(cabeceraId):
     
     calcularTotales(cabeceraId)
