@@ -63,7 +63,7 @@
 				  </li>
 				  <li class="list-group-item">
 					<p align="center">
-					  <button type="button" class="btn btn-primary" onclick="addProducto();">Guardar</button>
+					  <button type="button" class="btn btn-primary" onclick="validarCompra();">Guardar</button>
 					  <button type="button" class="btn btn-default ">Cancelar</button>
 					</p>
 				  </li>
@@ -97,7 +97,8 @@
 				   		</div>
 				   		<div class="col-sm-5">			   			
 							<input type="text" id="txtNombrePrd" readonly class="form-control" placeholder="Nombre">	
-							<input type="hidden" id="txtProductoCargado" readonly value="0" />					
+							<input type="hidden" id="txtProductoCargado" readonly value="0" />
+							<input type="hidden" id="txtCantidadProducto" value="0"  />					
 						</div>	
 						<div class="col-sm-3">			   			
 							<input type="text" id="txtCantidadPrd" class="form-control" placeholder="Cantidad">						
@@ -237,7 +238,7 @@
 			document.getElementById("spanDescuento").innerHTML = data.desc;
 			document.getElementById("spanNeto").innerHTML = data.total;
 			document.getElementById("spanTotal").innerHTML = data.totalPagar ;			
-			
+			document.getElementById('txtCantidadProducto').value = i;
 			clearProducto()
 
 		}
@@ -267,6 +268,67 @@
 		{		
 			Dajaxice.factCompra.eliminarPrd(listarProductos,{'numPrd': id_prod,
 															'cabeceraId': cabeceraGeneral});	
+		}
+		
+		function validarCompra()
+		{		
+			var contador = document.getElementById('txtCantidadProducto').value;	
+			var texto = '<ul>'
+			var bandera = 'N';
+			
+			if( contador == 0 )
+			{
+				texto = texto + '<li>Debe tener m&iacute;nimo un producto registrado en la factura</li>';
+				bandera = 'Y';
+			}
+
+			var campo = document.getElementById('txtNombreProveedor').value;
+			if( campo == '' )
+			{
+				texto = texto + '<li>Debe seleccionar un proveedor</li>';
+				bandera = 'Y';
+			}
+			campo = document.getElementById('txtFechaFactura').value;
+			if( campo == '' )
+			{
+				texto = texto + '<li>Debe ingresar una fecha para la compra</li>';
+				bandera = 'Y';
+			}
+			campo = document.getElementById('txtNumeroFactura').value;
+			if( campo == '' )
+			{
+				texto = texto + '<li>Debe ingresar un n&uacute;mero de compra</li>';
+				bandera = 'Y';
+			}
+			
+			var texto = texto + '</ul>' ;
+			
+			if ( bandera == 'Y' )
+			{
+				$("#resultado").html('<div class="alert alert-danger">' + texto + '</div>');	
+			}
+			else
+			{
+				$("#resultado").html('');
+				var forma_pago = document.getElementById("formaPagoCheck").checked;
+				if ( forma_pago == false )
+				{
+					forma_pago = 'C'
+				}
+				else
+				{
+					forma_pago = 'F'
+				}
+				Dajaxice.factCompra.comprar(finalCompra,{'cabecera': cabeceraGeneral,
+															  'formaPago' : forma_pago,
+															  'fechaFact' :	$('#txtFechaFactura').val(),				
+															  'numFact': $('#txtNumeroFactura').val()});
+			}
+		}			
+		
+		function finalCompra()
+		{
+			alert('termino');
 		}
 		
 	</script>

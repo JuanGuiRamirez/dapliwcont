@@ -16,6 +16,7 @@
 				</div>
 				<div class="col-md-4 col-md-offset-4 text-right"  id="btnTitulo">
 					<a href="{% url cliente.views.registro %}" class="btn btn-primary" id="btnAgregarTercero" >Agregar Tercero</a>
+					<a href="{% url cliente.views.imprimir 0  %}"  class="btn btn-default" id="btnAgregarTercero" >Imprimir pdf</a>
 				</div>										
 		</article> 
 		
@@ -124,8 +125,33 @@
 		}
 
 		function eliminar()
-		{
+		{			
 			url = '{% url cliente.views.delCliente 0 %}'.replace('0', id_cli);
+			$.ajax({			
+						url: url,						
+						type: 'GET',
+						data : {formula: url},
+						success: function(data){
+							location.reload();
+						},
+						processData: false,
+						contentType: false,
+						error: function(data){
+							alert('Error de servidor');
+						}
+					});
+		}
+		
+		function generarPDF()
+		{
+			texto = document.getElementById("txtBuscarFiltro").value;
+			if (texto != '')
+			{
+				url = '{% url cliente.views.imprimir 0 %}'.replace('0', texto);
+			}else{
+				url = '{% url cliente.views.imprimir 0 %}';
+			}		
+			
 			$.ajax({			
 						url: url,						
 						type: 'GET',

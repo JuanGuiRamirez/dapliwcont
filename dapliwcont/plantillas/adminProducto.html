@@ -76,12 +76,32 @@
 {% block script %}
 	<script type="text/javascript" language="javascript" src="{{STATIC_URL}}js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="{{STATIC_URL}}js/dataTables.bootstrap.js"></script>
+	<script type="text/javascript" language="javascript" src="{{STATIC_URL}}js/tool.js"></script>
 
 	<script type="text/javascript">
 	
-		$(document).ready(function(){
-		    $('#tablaPrd').dataTable({
-		    	'oLanguage': {
+		$(document).on('ready', inicio);
+		
+		function inicio()
+		{
+			dataTable();
+			//armarResponsive();
+		}
+	
+		function armarResponsive()
+		{
+			var resIni = '<article id="tablaResponsive"  class="table-responsive">';
+			var resFin = '</article>';
+			var div = document.getElementById('tablaPrd');
+			var div2 = document.getElementById('tablaPrd');
+			div.innerHTML = ""
+			div.innerHTML = resIni + resFin;	
+		}
+		
+		function dataTable()
+		{
+			$('#tablaPrd').dataTable({				
+				'oLanguage': {
 		    		"sSearch": "Buscar:",
 		    		"sProcessing": "Procesando...",
 		    		"sEmptyTable": "No hay productos disponibles",
@@ -101,12 +121,13 @@
 						"sPrevious": "Anterior"
 					},
 					"fnInfoCallback": null,
-				},
-				
-				
+				}				
 		    });
-		    
-		});
+			
+			
+		}
+		
+		
 
 		var id_pro = 0;
 
