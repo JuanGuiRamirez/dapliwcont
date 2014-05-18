@@ -1,4 +1,6 @@
+from caja.models import caja, egreso
 from cliente.models import cliente
+from cxp.models import cabeceraCxp, cuentaPagar
 from dajax.core import Dajax
 from dajaxice.decorators import dajaxice_register
 from django.db.models.aggregates import Sum
@@ -97,6 +99,81 @@ def eliminarPrd (request, numPrd, cabeceraId):
     prdEliminar.delete()
     return listaProductos(cabeceraId)
     
+    
+
+
+@dajaxice_register
+def comprar( request, cabecera, formaPago, fechaFact, numFact ):
+    #actualizamos la cabecera
+    cab = cabeceraCompra.objects.get( pk=cabecera )
+    cab.numeroFactura = numFact
+    cab.fechaFactura = fechaFact
+    cab.estado = 'F'
+    cab.formaPago = formaPago
+    cab.save()
+    
+    
+    #actualizamos el inventario
+    for i in productoCompra.objects.filter(cabecera_id=cabecera):
+        i.productoId.cantidad = i.productoId.cantidad + i.cantidad
+        i.productoId.save()
+        
+    if formaPago == 'F':
+        cabCxp = cabeceraCxp.objects.filter(proveedorId_id = cab.proveedorId_id)            
+        if not cabCxp:
+            cabeceraCuenta = cabeceraCxp(
+                                         created = datetime.datetime.now(),
+                                         createdby = str(request.user.id),
+                                         isactive = "Y",
+                                         updated = datetime.datetime.now(),
+                                         updatedby = str(request.user.id),  
+                                         totalAbonosGeneral = 0, 
+                                         totalDeudaGeneral = cab.totalPagar,
+                                         proveedorId_id = cab.proveedorId_id
+                                         )
+            cabeceraCuenta.save()
+            cabeceraGeneralId =  cabeceraCuenta.id
+        else:
+            cabeceraCuenta[0].totalDeudaGeneral = cabeceraCuenta[0].totalDeudaGeneral + cab.totalPagar
+            cabeceraCuenta[0].save()
+            cabeceraGeneralId =  cabeceraCuenta[0].id
+            
+            
+        cuenta = cuentaPagar(created = datetime.datetime.now(),
+                                createdby = str(request.user.id),
+                                isactive = "Y",
+                                updated = datetime.datetime.now(),
+                                updatedby = str(request.user.id),  
+                                totalAbonos = 0,
+                                cabeceraId_id = cabeceraGeneralId,
+                                facturaId_id = cabecera,
+                                fechaCuenta = datetime.date.today(),
+                                totalDeuda = cab.totalPagar
+                              )
+        cuenta.save()
+            
+    else:
+        cajaUso = caja.cajaUso.all()
+        egr = egreso(created = datetime.datetime.now(),
+                        createdby = str(request.user.id),
+                        isactive = "Y",
+                        updated = datetime.datetime.now(),
+                        updatedby = str(request.user.id),                      
+                        totalEgreso =  cab.totalPagar , 
+                        fechaEgreso = datetime.datetime.now(),
+                        descripcion = 'Compra de contado al proveedor : ' + str(cab.proveedorId) ,
+                        cajaId_id = cajaUso[0].id                      
+                      )
+        egr.save()
+    
+    
+        
+    return simplejson.dumps({
+                            'mensaje' : 'Final',
+                            })
+    
+    
+
 
 def listaProductos(cabeceraId):
     
@@ -111,6 +188,7 @@ def listaProductos(cabeceraId):
                     'descuento' : i.descuento,
                     'total' : i.valorTotal, } 
                     for i in productoCompra.objects.filter(cabecera_id=cabeceraId) ]
+    
     return simplejson.dumps({
                             'datos': prds,
                             'total': cabecera.totalNeto,
