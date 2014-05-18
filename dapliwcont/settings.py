@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'factCompra',
     'caja',
     'cxc',
+    'cxp',
     'principal',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',

@@ -7,7 +7,7 @@ dajaxice_autodiscover()
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
-# admin.autodiscover()
+admin.autodiscover()
 
 urlpatterns = patterns('',
                        
@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     
     url(r'^rclis/$', 'cliente.views.index'),
     url(r'^rcli/$', 'cliente.views.registro'),
+    url(r'^cpdf/(?P<texto>[^/]+)$', 'cliente.views.imprimir'),
     url(r'^ecli/(?P<cliente_id>[^/]+)$', 'cliente.views.editarCliente'),
     url(r'^dcli/(?P<cliente_id>[^/]+)$', 'cliente.views.delCliente'),
     
@@ -47,6 +48,8 @@ urlpatterns = patterns('',
     url(r'^abcc/(?P<cxcId>\d+)$', 'cxc.views.addAbono'),  
     url(r'^lfcc/(?P<cxcId>\d+)$', 'cxc.views.verCxc'),
     url(r'^detF/(?P<facturaId>\d+)$', 'cxc.views.detalleFactura'),
+    
+    url(r'^lcxp/$', 'cxp.views.index'), 
     
     url(r'^detPDF/$', 'cxc.views.crearPDF'),    
  
