@@ -14,6 +14,8 @@ class cliente( models.Model ):
     email = models.EmailField(max_length=120)
     telefono = models.CharField(max_length=120)
     celular = models.CharField(max_length=120)
+    is_cliente = models.BooleanField()
+    is_proveedor = models.BooleanField()
     saldodeuda = models.FloatField()
     saldofavor = models.FloatField()
     limitecredito = models.FloatField()

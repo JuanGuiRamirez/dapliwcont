@@ -13,6 +13,8 @@ class clienteForms( forms.ModelForm ):
     saldodeuda = forms.FloatField(initial=0, widget=forms.TextInput(attrs={'class':'form-control'}),)
     saldofavor = forms.FloatField(initial=0, widget=forms.TextInput(attrs={'class':'form-control'}),)
     limitecredito = forms.FloatField(initial=0, widget=forms.TextInput(attrs={'class':'form-control'}),) 
+    is_cliente = forms.BooleanField(widget=forms.CheckboxInput(), required=False)
+    is_proveedor = forms.BooleanField(widget=forms.CheckboxInput(), required=False)
         
     class Meta:
         model = cliente

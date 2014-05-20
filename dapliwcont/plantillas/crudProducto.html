@@ -6,15 +6,97 @@
 
 {% block contenido %}
 	<section id="contenedor" class="col-md-6 col-md-offset-3 ">	
-		<article  class="panel panel-primary ">
+		<article  class="panel panel-default ">
 			<div class="panel-heading" id="panel-heading">
 				<h3 class="panel-title">Registro Producto</h3>
 			</div>
 			<div class="panel-body">
 				<form method="post"> {% csrf_token %}
-					{{ formulario }}
-					<input type="submit" class="btn btn-primary" id="btn_submit">
-					<a href="{% url producto.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>	
+					{% if formulario.errors %}
+						<div class="alert alert-danger">
+						
+							{% if formulario.codigo.errors %}
+								Codigo producto : {{ formulario.codigo.errors }}
+							{% endif %}
+							
+							{% if formulario.nombre.errors %}
+								Nombre producto : {{ formulario.nombre.errors }}
+							{% endif %}
+							
+							{% if formulario.cantidad.errors %}
+								Cantidad : {{ formulario.cantidad.errors }}
+							{% endif %}
+							
+							{% if formulario.preciocompra.errors %}
+								Precio compra : {{ formulario.preciocompra.errors }}
+							{% endif %}
+							
+							{% if formulario.precioventa.errors %}
+								Precio venta : {{ formulario.precioventa.errors }}
+							{% endif %}
+							
+							{% if formulario.descuento_max.errors %}
+								Descuento : {{ formulario.descuento_max.errors }}
+							{% endif %}
+							
+							{% if formulario.observaciones.errors %}
+								Observaciones : {{ formulario.observaciones.errors }}
+							{% endif %}												
+							
+						</div>
+					{% endif %} 
+				
+				
+					<article  class="col-md-6">
+						<div class="form-group">
+							<label for=id_nombre>Codigo producto</label>
+							{{ formulario.codigo }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Nombre producto</label>
+							{{ formulario.nombre }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Cantidad</label>
+							{{ formulario.cantidad }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Precio compra</label>
+							{{ formulario.preciocompra }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Precio venta</label>
+							{{ formulario.precioventa }}
+						</div>
+					
+					</article>
+					
+					<article  class="col-md-6">							
+						
+						
+						<div class="form-group">
+							<label for=id_nombre>Descuento</label>
+							{{ formulario.descuento_max }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Observaciones</label>
+							{{ formulario.observaciones }}
+						</div>
+						
+						<input type="submit" class="btn btn-primary" id="btn_submit">
+						<a href="{% url producto.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>	
+					
+					</article>
+				
+				
+				
+					
+					
 				</form>
 			</div>			
 		</article>

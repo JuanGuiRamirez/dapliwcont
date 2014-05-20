@@ -6,17 +6,130 @@
 
 {% block contenido %}
 	<section id="contenedor" class="col-md-6 col-md-offset-3 ">	
+		<article  class="panel panel-default ">
+			<div class="panel-heading" id="panel-heading">
+				<h3 class="panel-title">{{ titulo }}</h3>
+			</div>
+			<div class="panel-body">
+				<form method="post"> {% csrf_token %}
+					{% if formulario.errors %}
+						<div class="alert alert-danger">
+						
+							{% if formulario.codigo.errors %}
+								Codigo producto : {{ formulario.codigo.errors }}
+							{% endif %}
+							
+							{% if formulario.nombre.errors %}
+								Nombre producto : {{ formulario.nombre.errors }}
+							{% endif %}
+							
+							{% if formulario.cantidad.errors %}
+								Cantidad : {{ formulario.cantidad.errors }}
+							{% endif %}
+							
+							{% if formulario.preciocompra.errors %}
+								Precio compra : {{ formulario.preciocompra.errors }}
+							{% endif %}
+							
+							{% if formulario.precioventa.errors %}
+								Precio venta : {{ formulario.precioventa.errors }}
+							{% endif %}
+							
+							{% if formulario.descuento_max.errors %}
+								Descuento : {{ formulario.descuento_max.errors }}
+							{% endif %}
+							
+							{% if formulario.observaciones.errors %}
+								Observaciones : {{ formulario.observaciones.errors }}
+							{% endif %}												
+							
+						</div>
+					{% endif %} 
+					
+					<article  class="col-md-6">
+					
+						<div class="form-group">
+							<label for=id_nombre>Identificacion:</label>
+							{{ formulario.identificacion }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Nombre:</label>
+							{{ formulario.nombre }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Direccion:</label>
+							{{ formulario.direccion }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Email:</label>
+							{{ formulario.email }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Telefono:</label>
+							{{ formulario.telefono }}
+						</div>
+						
+						
+						
+					</article>
+					
+					<article  class="col-md-6">
+					
+						<div class="form-group">
+							<label for=id_nombre>Celular:</label>
+							{{ formulario.celular }}
+						</div>
+					
+						<div class="form-group">
+							<label for=id_nombre>Saldo Deuda:</label>
+							{{ formulario.saldodeuda }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Saldo a Favor:</label>
+							{{ formulario.saldofavor }}
+						</div>
+						
+						<div class="form-group">
+							<label for=id_nombre>Limite de credito:</label>
+							{{ formulario.limitecredito }}
+						</div>
+						
+						<div class="form-group">
+							<label class="checkbox-inline">
+							  <input type="checkbox" id="inlineCheckbox1" value="option1"> Es proveedor?
+							</label>
+							<label class="checkbox-inline">
+							  <input type="checkbox" id="inlineCheckbox2" value="option2"> Es cliente?
+							</label>
+						</div>
+						
+						<input type="submit" class="btn btn-primary" id="btn_submit">
+						<a href="{% url cliente.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>	
+						
+					</article>
+				
+										
+				</form>
+			</div>			
+		</article>
+		
+		
 		<article  class="panel panel-primary ">
 			<div class="panel-heading" id="panel-heading">
 				<h3 class="panel-title">{{ titulo }}</h3>
 			</div>
 			<div class="panel-body">
 				<form method="post"> {% csrf_token %}
-					{{ formulario }}
-					<input type="submit" class="btn btn-primary" id="btn_submit">
-					<a href="{% url cliente.views.index %}" class="btn btn-default" id="btn_volver">Volver</a>	
+					{{ formulario }}				
 				</form>
 			</div>			
 		</article>
+		
+		
 	</section>
 {% endblock contenido %}
