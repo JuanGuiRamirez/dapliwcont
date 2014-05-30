@@ -15,14 +15,15 @@ class producto( models.Model ):
     precioventa = models.FloatField()
     imagen = models.CharField(max_length=200, blank=True, null=True)
     descuento_max = models.FloatField()
-    observaciones = models.CharField(max_length=255, blank=True, null=True)
+    observaciones = models.CharField(max_length=255, blank=True)
     
     def __str__(self):
         return self.nombre
     
     def clean(self):
-        if self.precioventa < self.preciocompra:
-            raise ValidationError('El precio de venta debe ser mayor que el precio de compra')
+        if self.precioventa <= self.preciocompra:
+            raise ValidationError('El precio de venta debe ser mayor que el precio de compra',)
+            
         
         if self.pk == None:
             if producto.objects.filter(codigo=self.codigo).exists():

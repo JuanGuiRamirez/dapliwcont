@@ -15,33 +15,34 @@
 					{% if formulario.errors %}
 						<div class="alert alert-danger">
 						
-							{% if formulario.codigo.errors %}
-								Codigo producto : {{ formulario.codigo.errors }}
+							{% if formulario.identificacion.errors %}
+								Identificacion : {{ formulario.identificacion.errors }}
 							{% endif %}
 							
 							{% if formulario.nombre.errors %}
-								Nombre producto : {{ formulario.nombre.errors }}
+								Nombre : {{ formulario.nombre.errors }}
 							{% endif %}
 							
-							{% if formulario.cantidad.errors %}
-								Cantidad : {{ formulario.cantidad.errors }}
+							{% if formulario.direccion.errors %}
+								Direccion : {{ formulario.direccion.errors }}
 							{% endif %}
 							
-							{% if formulario.preciocompra.errors %}
-								Precio compra : {{ formulario.preciocompra.errors }}
+							{% if formulario.email.errors %}
+								Email : {{ formulario.email.errors }}
 							{% endif %}
 							
-							{% if formulario.precioventa.errors %}
-								Precio venta : {{ formulario.precioventa.errors }}
+							{% if formulario.telefono.errors %}
+								Telefono : {{ formulario.telefono.errors }}
 							{% endif %}
 							
-							{% if formulario.descuento_max.errors %}
-								Descuento : {{ formulario.descuento_max.errors }}
-							{% endif %}
+							{% if formulario.celular.errors %}
+								Celular : {{ formulario.celular.errors }}
+							{% endif %}				
+											
 							
-							{% if formulario.observaciones.errors %}
-								Observaciones : {{ formulario.observaciones.errors }}
-							{% endif %}												
+							{% if formulario.non_field_errors %}
+								Errores Generales : {{ formulario.non_field_errors }}
+							{% endif %}	
 							
 						</div>
 					{% endif %} 
@@ -119,16 +120,7 @@
 		</article>
 		
 		
-		<article  class="panel panel-primary ">
-			<div class="panel-heading" id="panel-heading">
-				<h3 class="panel-title">{{ titulo }}</h3>
-			</div>
-			<div class="panel-body">
-				<form method="post"> {% csrf_token %}
-					{{ formulario }}				
-				</form>
-			</div>			
-		</article>
+
 		
 		
 	</section>

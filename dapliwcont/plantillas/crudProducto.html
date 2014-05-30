@@ -41,7 +41,12 @@
 							
 							{% if formulario.observaciones.errors %}
 								Observaciones : {{ formulario.observaciones.errors }}
-							{% endif %}												
+							{% endif %}	
+							
+							{% if formulario.non_field_errors %}
+								Errores Generales : {{ formulario.non_field_errors }}
+							{% endif %}	
+							
 							
 						</div>
 					{% endif %} 

@@ -36,7 +36,7 @@ def registro(request):
             ins_save.createdby = str(request.user.id)
             ins_save.isactive = 'Y'
             ins_save.updated = datetime.datetime.now() 
-            ins_save.updatedby = str(request.user.id),
+            ins_save.updatedby = str(request.user.id)
             ins_save.save()
             return HttpResponseRedirect('/index')
     else:

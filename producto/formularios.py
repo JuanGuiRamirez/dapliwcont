@@ -10,7 +10,7 @@ class productoForms( forms.ModelForm ):
     preciocompra = forms.FloatField(initial=0, widget=forms.TextInput(attrs={'class':'form-control'}),)
     precioventa = forms.FloatField(initial=0, widget=forms.TextInput(attrs={'class':'form-control'}),)
     descuento_max = forms.FloatField(initial=0, widget=forms.TextInput(attrs={'class':'form-control'}),)   
-    observaciones = forms.CharField(widget=forms.Textarea(attrs={'rows':8, 'cols':20, 'class':'form-control'}))
+    observaciones = forms.CharField(widget=forms.Textarea(attrs={'rows':8, 'cols':20, 'class':'form-control'}),required=False)
     
     class Meta:
         model = producto

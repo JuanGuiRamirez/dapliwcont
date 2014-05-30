@@ -1,0 +1,83 @@
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url producto.views.index %}">DAPLIW</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">		        
+        <li class="active"><a href="{% url producto.views.index %}">Productos</a></li>
+        <li><a href="{% url cliente.views.index %}">Terceros</a></li>       
+        <li><a href="/factV/">Factura Venta</a></li>
+        <li><a href="/factC/">Factura Compra</a></li>
+        <li><a href="/clis/">Caja</a></li>
+        <li><a href="/lcc/">Creditos</a></li>
+        <li><a href="/lcxp/">Cuentas por pagar</a></li>
+        
+        <li class="dropdown active">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reportes <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/cLisDet/I" >Ingresos - Egresos</a></li>		            
+            <li class="divider"></li>
+            <li><a href="#">Factura de venta</a></li>
+            <li class="divider"></li>		            
+            <li><a href="#">Clientes</a></li>		            
+            <li><a href="#">Productos</a></li>
+          </ul>
+        </li>
+        
+      </ul>
+     
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/cerrar/">Salir</a></li> 		        
+      </ul>
+      
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+<!-- ====================== -->
+
+
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url producto.views.index %}">DAPLIW</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">		        
+        
+        {% for m in menu %}
+        	<li {% if m.active %} class="active" {% endif %}><a href=" {{ m.url }} "> {{ m.name }} </a></li>
+        {% endfor %}     
+        
+      </ul>
+     
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/cerrar/">Salir</a></li> 		        
+      </ul>
+      
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
